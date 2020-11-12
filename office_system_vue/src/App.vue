@@ -1,24 +1,24 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <MyNavBar></MyNavBar>
+    <router-view class="router"/>
   </div>
 </template>
 
 <script>
-
+import MyNavBar from "./components/MyNavbar";
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    MyNavBar
+  }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.router {
   margin-top: 60px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 </style>
