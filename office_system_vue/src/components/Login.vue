@@ -74,7 +74,7 @@
           <b-button variant="primary">登录</b-button>
         </b-tab>
       </b-tabs>
-      <router-link to="">没有账号？去注册</router-link>
+      <router-link to="/register">没有账号？去注册</router-link>
     </b-card>
   </div>
 </template>

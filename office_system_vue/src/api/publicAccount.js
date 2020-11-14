@@ -1,34 +1,34 @@
 import request from '../util/request'
 
 export function createPersonalAccount(name,brief) {
+  let formData = new FormData()
+  formData.append('name',name)
+  formData.append('brief',brief)
   return request({
     url: "/publicAccount/createPersonalAccount",
     method: "post",
-    data: {
-      'name': name,
-      'brief': brief
-    }
+    data: formData
   })
 }
 
 export function createCompanyAccount(name,brief) {
+  let formData = new FormData()
+  formData.append('name',name)
+  formData.append('brief',brief)
   return request({
     url: "/publicAccount/createCompanyAccount",
-    method: "get",
-    params: {
-      'name': name,
-      'brief': brief
-    }
+    method: "post",
+    data: formData
   })
 }
 
 export function createPost(id) {
+  let formData = new FormData()
+  formData.append('id',id)
   return request({
     url: "/publicAccount/createPost",
     method: "post",
-    data: {
-      'id': id
-    }
+    data: formData
   })
 }
 
@@ -54,31 +54,31 @@ export function allSubscribePublicAccounts() {
 }
 
 export function search(key) {
+  let formData = new FormData()
+  formData.append('key',key)
   return request({
     url: "/publicAccount/search",
     method: "post",
-    data: {
-      'key': key
-    }
+    data: formData
   })
 }
 
 export function getAllPosts(id) {
+  let formData = new FormData()
+  formData.append('id',id)
   return request({
     url: "/publicAccount/getAllPosts",
     method: "post",
-    data: {
-      'id': id
-    }
+    data: formData
   })
 }
 
 export function subscribe(id) {
+  let formData = new FormData()
+  formData.append('id',id)
   return request({
     url: "/publicAccount/subscribe",
     method: "post",
-    data: {
-      'id': id
-    }
+    data: formData
   })
 }
