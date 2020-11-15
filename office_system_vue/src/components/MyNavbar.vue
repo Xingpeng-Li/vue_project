@@ -11,7 +11,13 @@
           <b-nav-item style="margin-right: 10px" href="#" active>消息</b-nav-item>
           <b-nav-item style="margin-right: 10px" href="#">公告栏</b-nav-item>
           <b-nav-item style="margin-right: 10px" href="#">聊天</b-nav-item>
-          <b-nav-item style="margin-right: 10px" href="#">应用</b-nav-item>
+          <b-nav-item-dropdown style="margin-right: 10px" right>
+            <!-- Using 'button-content' slot -->
+            <template v-slot:button-content>
+              应用
+            </template>
+            <b-dropdown-item to="/approval">审批</b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
