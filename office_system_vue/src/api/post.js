@@ -1,34 +1,34 @@
 import request from '../util/request'
 
 export function postDetail(postId) {
+  let formData = new FormData()
+  formData.append('postId',postId)
   return request({
     url: "/post/get",
     method: "post",
-    data: {
-      'postId': postId
-    }
+    data: formData
   })
 }
 
 export function createPost(file,postTitle,postBody,postBrief) {
+  let formData = new FormData()
+  formData.append('file',file)
+  formData.append('postTitle',postTitle)
+  formData.append('postBody',postBody)
+  formData.append('postBrief',postBrief)
   return request({
     url: "/post/createPost",
     method: "post",
-    data: {
-      'file': file,
-      'postTitle': postTitle,
-      'postBody': postBody,
-      'postBrief': postBrief
-    }
+    data: formData
   })
 }
 
 export function readNotification(notificationId) {
+  let formData = new FormData()
+  formData.append('notificationId',notificationId)
   return request({
     url: "/notification/read",
-    method: "get",
-    params: {
-      'notificationId': notificationId
-    }
+    method: "post",
+    data: formData
   })
 }

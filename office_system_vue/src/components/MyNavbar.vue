@@ -21,7 +21,7 @@
             <template v-slot:button-content>
               用户
             </template>
-            <b-dropdown-item href="#">个人中心</b-dropdown-item>
+            <b-dropdown-item to="/person">个人中心</b-dropdown-item>
             <b-dropdown-item href="#">登出</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>

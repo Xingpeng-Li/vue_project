@@ -37,7 +37,7 @@
               </b-input-group>
             </div>
           </b-card-body>
-          <b-button variant="primary">登录</b-button>
+          <b-button variant="primary" @click="loginByPassword">登录</b-button>
         </b-tab>
         <b-tab title="验证码登录">
           <b-card-body>
@@ -74,12 +74,14 @@
           <b-button variant="primary">登录</b-button>
         </b-tab>
       </b-tabs>
-      <router-link to="">没有账号？去注册</router-link>
+      <router-link to="/register">没有账号？去注册</router-link>
     </b-card>
   </div>
 </template>
 
 <script>
+import {loginByPassword} from "../api/login";
+
 export default {
   name: "Login",
   data() {
@@ -90,7 +92,17 @@ export default {
     }
   },
   methods: {
-
+    loginByPassword() {
+      loginByPassword(this.phoneNumber,this.password).then(res => {
+        if(res.data.status === 'success') {
+          this.$router.push('/message')
+        }
+        else {
+          console.log(res.data)
+          alert('登录失败'+res.data.errMsg)
+        }
+      })
+    }
   },
   computed: {
     phoneNumberState() {
