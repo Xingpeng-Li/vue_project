@@ -2,15 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="189cfffc-7e18-4174-8602-f70b8519092f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vue_project.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/application.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/chat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/cloudFile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/company.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/File.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/group.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/healthPunchin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/importUser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/report.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/speechRecognition.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/user.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/components/PersonalInfo.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/components/Registration.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/announcement.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/announcement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/notification.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/notification.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/openvidu.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/openvidu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/post.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/publicAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/publicAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/HelloWorld.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/MyNavbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/MyNavbar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Test.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/util/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/util/request.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
