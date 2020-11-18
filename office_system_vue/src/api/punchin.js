@@ -14,14 +14,14 @@ export function sendPunchinNotification(key) {
   })
 }
 
-export function getPunchinCount(key) {
+export function getPunchinCount() {
   return request({
     url: "/punchin/count",
     method: "get"
   })
 }
 
-export function punchin(key) {
+export function healthExcel(key) {
   return request({
     url: "/punchin",
     method: "get"

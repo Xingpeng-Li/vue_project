@@ -7,6 +7,7 @@ import PersonalInfo from "../components/PersonalInfo";
 
 import AttendanceStatistics from "../components/AttendanceStatistics";
 import Approval from "../components/Approval";
+import Mail from "../components/Mail";
 
 Vue.use(Router)
 
@@ -16,8 +17,9 @@ export default new Router({
     { path: '/', name: 'Login', component: Login, meta: {showNav: false}},
     { path: '/register', name: 'Registration', component: Registration, meta: {showNav: false}},
     { path: '/person', name: 'PersonalInfo', component: PersonalInfo, meta: {showNav: true}},
-    {path: '/statistic',name: 'AttendanceStatistics',component: AttendanceStatistics,meta: {showNav: false}}
+    {path: '/statistic',name: 'AttendanceStatistics',component: AttendanceStatistics,meta: {showNav: false}},
     { path: '/person', name: 'PersonalInfo', component: PersonalInfo, meta: {showNav: true}},
+    { path: '/mail', name: 'Mail', component: Mail, meta: {showNav: true}},
     { path: '/approval', name: 'Approval', component: Approval, meta: {showNav: true}},
   ],
   mode: "history"
