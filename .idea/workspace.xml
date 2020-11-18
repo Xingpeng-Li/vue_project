@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="189cfffc-7e18-4174-8602-f70b8519092f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/File.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/group.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/healthPunchin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/importUser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/report.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/speechRecognition.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/api/user.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/components/PersonalInfo.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/office_system_vue/src/components/Registration.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/announcement.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/announcement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/notification.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/notification.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/openvidu.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/openvidu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/post.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/publicAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/publicAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/HelloWorld.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/MyNavbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/MyNavbar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Test.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/util/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/util/request.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kC1zW1XFTokYMHEg0F5gUFPynj" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="189cfffc-7e18-4174-8602-f70b8519092f" name="Default Changelist" comment="" />
+      <created>1605190027370</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605190027370</updated>
+      <workItem from="1605190031487" duration="4163000" />
+      <workItem from="1605371537134" duration="2305000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/office_system_vue/src/components/Message.vue</url>
+          <line>77</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
