@@ -110,7 +110,8 @@ export default {
       })
     },
     register() {
-      register(this.name, this.password, this.phoneNumber, this.verificationCode).then(res => {
+      let password = this.md5(this.password)
+      register(this.name, password, this.phoneNumber, this.verificationCode).then(res => {
         if (res.data.status === "success") {
           alert("注册成功！点击返回登录界面");
           this.$router.push('/')
