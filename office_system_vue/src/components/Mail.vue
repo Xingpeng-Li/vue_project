@@ -1,7 +1,7 @@
 <template>
   <div class="mail">
     <h1 style="text-align: left">邮箱</h1>
-    <b-card class="card" no-body align="center">
+    <b-card class="myCard" no-body align="center">
       <b-tabs pills card vertical>
         <b-tab title="收信箱" active>
           <b-card-body>
@@ -33,15 +33,19 @@
         <b-tab title="写信" @click="$bvModal.show('bv-modal-send')">
           <b-card-body>
             <div style="width: 800px">
-              <b-modal id="bv-modal-send" hide-footer>
-                <template #modal-title>
-                  写信
-                </template>
+<!--              <b-modal id="bv-modal-send" hide-footer>-->
+<!--                <template #modal-title>-->
+<!--                  写信-->
+<!--                </template>-->
+              <p>
+                写信
+              </p>
                 <div>
                   <b-form-group
                     id="receiver"
                     label-cols-sm="4"
                     label-cols-lg="3"
+                    align="left"
                     label="发送到："
                     label-for="input-horizontal"
                   >
@@ -54,6 +58,7 @@
                     label-cols-sm="4"
                     label-cols-lg="3"
                     label="主题："
+                    align="left"
                     label-for="input-horizontal"
                   >
                     <b-form-input id="input8" v-model="subject"></b-form-input>
@@ -80,7 +85,7 @@
                     关闭
                   </b-button>
                 </div>
-              </b-modal>
+<!--              </b-modal>-->
             </div>
           </b-card-body>
         </b-tab>
@@ -138,6 +143,8 @@
 </template>
 
 <script>
+import {getDeptUser} from "../api/healthPunchin";
+
 export default {
   name: "Mail",
   data(){
@@ -168,6 +175,9 @@ export default {
     sendAttachmentsMail(){
 
     }
+  },
+  mounted() {
+
   }
 }
 </script>

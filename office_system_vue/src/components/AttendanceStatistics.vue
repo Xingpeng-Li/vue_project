@@ -2,9 +2,9 @@
   <div class="statistics">
     <h1 style="text-align: center">打卡统计</h1>
     <hr>
-    <b-card class="card" no-body align="center">
+    <b-card class="myCard" no-body align="center">
       <b-tabs pills card>
-        <b-tab title="健康打卡统计" active>
+        <b-tab title="健康打卡统计" @click="getDeptUser" active>
           <b-card-body>
             <div role="group">
               <div>
@@ -42,9 +42,9 @@
               </div>
             </div>
           </b-card-body>
-          <b-button variant="primary" @click="getDeptUser">查看</b-button>
+<!--          <b-button variant="primary" @click="getDeptUser">查看</b-button>-->
         </b-tab>
-        <b-tab title="考勤打卡统计">
+        <b-tab title="考勤打卡统计" @click="getPunchinCount">
           <b-card-body>
             <div role="group">
               <div>
@@ -82,7 +82,7 @@
               </div>
             </div>
           </b-card-body>
-          <b-button variant="primary" @click="getPunchinCount">查看</b-button>
+<!--          <b-button variant="primary" @click="getPunchinCount">查看</b-button>-->
         </b-tab>
       </b-tabs>
     </b-card>
@@ -134,6 +134,9 @@ export default {
         }
       })
     }
+  },
+  mounted() {
+    this.getDeptUser()
   }
 
 }
