@@ -1,7 +1,7 @@
 <template>
   <div class="myNavbar" v-if="$route.meta.showNav">
     <b-navbar toggleable="lg" type="dark" fixed="top">
-      <b-navbar-brand href="#">Office System</b-navbar-brand>
+      <b-navbar-brand to="/home" :active="$route.name === 'Home'">Office System</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
@@ -27,7 +27,7 @@
             <b-dropdown-item>发布公告</b-dropdown-item>
             <b-dropdown-item>语音识别</b-dropdown-item>
             <b-dropdown-item>打卡提醒</b-dropdown-item>
-            <b-dropdown-item>打卡记录</b-dropdown-item>
+            <b-dropdown-item to="/statistic" :active="$route.name === 'AttendanceStatistics'">打卡记录</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
