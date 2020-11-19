@@ -101,7 +101,7 @@ export default {
         }
         else {
           console.log(res.data)
-          alert('登录失败'+res.data.errMsg)
+          alert('登录失败，'+res.data.data.errMsg)
         }
       })
     }
