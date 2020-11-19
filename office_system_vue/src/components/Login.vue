@@ -97,7 +97,7 @@ export default {
       loginByPassword(this.phoneNumber,password).then(res => {
         console.log(res)
         if(res.data.status === 'success') {
-          this.$router.push('/message')
+          this.$router.push('/home')
         }
         else {
           console.log(res.data)
@@ -119,8 +119,5 @@ export default {
 </script>
 
 <style scoped>
-.myCard {
-  width: 50%;
-  margin: auto;
-}
+@import '../assets/css/myCard.css';
 </style>

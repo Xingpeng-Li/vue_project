@@ -14,7 +14,7 @@
     </div>
 
 
-    <b-card class="myCard" no-body align="center" style="max-width: 600px;margin-left: 300px">
+    <b-card class="myCard" no-body align="center">
       <b-card-body>
 
         <b-input-group class="mt-3">
@@ -210,3 +210,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+@import '../assets/css/myCard.css';
+</style>

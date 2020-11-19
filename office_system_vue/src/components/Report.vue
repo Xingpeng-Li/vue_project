@@ -117,8 +117,5 @@ export default {
 </script>
 
 <style scoped>
-.myCard {
-  width: 50%;
-  margin: auto;
-}
+@import '../assets/css/myCard.css';
 </style>
