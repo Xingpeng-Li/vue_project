@@ -1,12 +1,26 @@
-import request from '../util/request'
 
-export function select(keywords) {
-  let formData = new FormData();
-  formData.append('keywords',keywords)
-  //查询接口
+import request from "../util/request"
+
+export function sendAnnouncement(type,title,body) {
   return request({
     url: "/announcement/send",
     method: "post",
-    data: formData
+    data: {
+      'type': type,
+      'title': title,
+      'body': body
+    }
   })
 }
+
+export function getAnnouncement(type) {
+  return request({
+    url: "/announcement/get",
+    method: "get",
+    params: {
+      'type': type
+    }
+  })
+}
+
+

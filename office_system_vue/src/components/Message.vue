@@ -7,7 +7,7 @@
     <hr>
     <!-- 消息表格-->
     <div style="margin-right: auto">
-      <b-table striped hover :items="notifications" :fields="fields">
+      <b-table striped hover :items="notifications" id="messageTable" :fields="fields">
         <template v-slot:cell(checked)="data">
           <p style="color: #ff0000" v-show="!data.value">未阅</p>
           <p style="color: #1dff00" v-show="data.value">已阅</p>
@@ -16,18 +16,18 @@
           <p>{{ showType(data) }}</p>
         </template>
         <template v-slot:cell(option)="row">
-          <b-button variant="outline-primary" v-show="optionShow(row).show" v-b-modal.reportModal size="sm" class="mr-1">
+          <b-button variant="outline-primary" v-show="optionShow(row).show" @click="execOption(row)" size="sm" class="mr-1">
             {{ optionShow(row).type }}
           </b-button>
 <!--          <label v-show="!optionShow(row).show">———</label>-->
         </template>
         <template v-slot:cell(download)="row">
-          <b-button variant="outline-dark" v-show="download(row)" size="sm" @click="deleteNotification(row.item.notification)" class="mr-1">
+          <b-button variant="outline-dark" v-show="download(row)" size="sm" @click="downloadFile(row)" class="mr-1">
             下载
           </b-button>
         </template>
         <template v-slot:cell(delete)="row">
-          <b-button variant="outline-danger" size="sm" @click="deleteNotification(row.item.notification)" class="mr-1">
+          <b-button variant="outline-danger" size="sm" @click="deleteNotification(row.item.notificationId)" class="mr-1">
             删除
           </b-button>
         </template>
@@ -35,7 +35,7 @@
     </div>
 
     <!--工作报告模态框 -->
-    <b-modal ok-disabled="true" id="reportModal" title="工作报告">
+    <b-modal ref="reportModal" title="批阅报告">
       <b-form-file
         v-model="reportFile"
         :state="Boolean(reportFile)"
@@ -113,17 +113,40 @@ export default {
       return false
     },
     deleteNotification(notificationId) {
-      alert('成功')
-      deleteNotification(notificationId).then(res => {
-        if(res.status === 'success') {
-          alert('删除成功！')
-        }
-        else {
-          alert(res.data.errMsg)
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+      let _this = this
+      if(confirm("确认删除这条信息吗？")) {
+        deleteNotification(notificationId).then(res => {
+          if(res.data.status === 'success') {
+            //刷新表格
+            for(var i = 0;i < _this.notifications.length;i++) {
+              if(_this.notifications[i].notificationId === notificationId) {
+                _this.notifications.splice(i,1)
+                break
+              }
+            }
+          }
+          else {
+            alert(res.data.errMsg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    },
+    downloadFile(row) {
+      window.location.href = row.item.body
+    },
+    execOption(row) {
+      let value = row.item.type  //根据type的不同执行不同的操作
+      if(value==="待批阅报告"){
+        this.$refs['']
+      } else if(value==="健康打卡" || value==="考勤打卡"){
+        return {'show': true, 'type':'前往'}
+      }else if(value==="待处理审批"){
+        return {'show': true, 'type':'查看'}
+      }else if(value==="待查看审批"){
+        return {'show': true, 'type':'查看'}
+      }
     },
     reply() {
       alert("发送")
