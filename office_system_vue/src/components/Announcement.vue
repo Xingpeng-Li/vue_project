@@ -25,12 +25,19 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" @click="download(companyAnnouncements[row.index].fileUrl)">
-                  <b-icon icon="download"></b-icon>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                  <b-icon icon="eye"></b-icon>
+
                 </b-button>
               </template>
+
             </b-table>
           </b-tab>
+
+          <b-modal id="modal-1" title="公告标题" hide-footer>
+            <h9>公告内容</h9><br><br>
+            <b-link href="http://www.baidu.com">财务部通知.word</b-link>
+          </b-modal>
 
           <b-tab title="部门公告" >
             <b-table
@@ -45,8 +52,9 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" @click="download(departmentAnnouncements[row.index].fileUrl)">
-                  <b-icon icon="download"></b-icon>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                  <b-icon icon="eye"></b-icon>
+
                 </b-button>
               </template>
             </b-table>
@@ -65,8 +73,9 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" @click="download(systemAnnouncements[row.index].fileUrl)">
-                  <b-icon icon="download"></b-icon>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                  <b-icon icon="eye"></b-icon>
+
                 </b-button>
               </template>
             </b-table>
@@ -89,7 +98,7 @@ export default {
       fields: [
         { key: 'title', label: '标题'},
         { key: 'time', label: '时间'},
-        { key: 'actions', label: '下载/预览' }
+        { key: 'actions', label: '预览' }
       ],
 
       companyAnnouncements:[
@@ -109,9 +118,7 @@ export default {
     }
   },
   methods: {
-    download(url){
-      window.location=url;
-    }
+
   },
   computed: {
 
