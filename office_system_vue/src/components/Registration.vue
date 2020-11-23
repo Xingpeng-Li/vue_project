@@ -2,7 +2,7 @@
 
   <div class="registration">
     <div>
-      <h1 style="text-align: center" @click="register">注册</h1>
+      <h1 style="text-align: center">注册</h1>
       <hr>
     </div>
     <b-card class="myCard" no-body align="center">

@@ -1,13 +1,13 @@
 import request from "../util/request";
 
 
-export function sendReport(file,type,addWatermark,approverPhoneNumber,secondApproverPhoneNumber) {
+export function sendReport(file,type,addWatermark,approverId,secondApproverId) {
   let formData = new FormData();
   formData.append('file',file);
   formData.append('type',type);
   formData.append('addWatermark',addWatermark);
-  formData.append('approverPhoneNumber',approverPhoneNumber);
-  formData.append('secondApproverPhoneNumber',secondApproverPhoneNumber);
+  formData.append('approverId',approverId);
+  formData.append('secondApproverId',secondApproverId);
   return request({
     url: "/report/send",
     method: "post",

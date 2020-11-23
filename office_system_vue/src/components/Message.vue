@@ -80,7 +80,7 @@ export default {
       optionType: null,     //操作的类型
       reportFile: null,    //回复的报告文件
       notificationId: '',
-      applicationType: 'XX审批',  //审批类型
+      applicationType: 'XX',  //审批类型
       applicationSender: 'XXX',  //发送者
       applicationStartTime: '',  //审批开始时间
       applicationEndTime: '',   //审批结束时间
@@ -191,6 +191,7 @@ export default {
         getApplication(row.item.notificationId).then(res => {
           //获得审批
           if(res.data.status === 'success') {
+            this.applicationType = res.data.data.type+'审批'
             this.applicationStartTime = res.data.data.startTime
             this.applicationEndTime = res.data.data.endTime
             this.applicationReason = res.data.data.reason
