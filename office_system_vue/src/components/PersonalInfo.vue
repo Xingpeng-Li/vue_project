@@ -40,7 +40,7 @@
           </template>
           <b-form-input
             v-model="sex"
-            :disabled="edit"
+            :disabled=true
             aria-describedby="input-live-help input-live-feedback"
             placeholder="请输入性别"
             trim
@@ -55,7 +55,7 @@
           </template>
           <b-form-input
             v-model="company"
-            :disabled="edit"
+            :disabled=true
             aria-describedby="input-live-help input-live-feedback"
             placeholder="请输入企业"
             trim
@@ -70,7 +70,7 @@
           </template>
           <b-form-input
             v-model="companyInvitingCode"
-            :disabled="edit"
+            :disabled=true
             aria-describedby="input-live-help input-live-feedback"
             placeholder="请输入企业邀请码"
             trim
@@ -85,7 +85,7 @@
           </template>
           <b-form-input
             v-model="department"
-            :disabled="edit"
+            :disabled=true
             aria-describedby="input-live-help input-live-feedback"
             placeholder="请输入部门"
             trim
@@ -113,8 +113,8 @@
           <b-form-group
             id="captcha"
           >
-            <b-form-input id="input-horizontal" style="max-width: 200px;margin-left: 350px" v-show="!edit"></b-form-input>
-            <b-button variant="link" style="margin-left: 300px" v-show="!edit">发送验证码</b-button>
+            <b-form-input id="input-horizontal" style="max-width: 200px;margin-left: 350px" v-show="!edit" v-model="verificationCode"></b-form-input>
+            <b-button variant="link" style="margin-left: 300px" v-show="!edit" @click="sendVerificationCode">发送验证码</b-button>
           </b-form-group>
         </div>
 
@@ -158,11 +158,12 @@
 
 <script>
 import {getMyPersonalInfo,updatePersonInfo} from "../api/user";
+import {verificationCode} from "../api/register";
 
 export default {
   computed: {
     state() {
-      return this.psw1==this.psw2
+      return this.psw1===this.psw2
     },
     invalidFeedback() {
       return "两次输入密码不一致"
@@ -170,20 +171,35 @@ export default {
   },
   data() {
     return {
+
+      //是否处于编辑状态
       edit:true,
+
+      //界面显示的数据
       name:"",
       sex:"",
       company:"",
       companyInvitingCode:"",
       department:"",
       phoneNumber:"",
+      verificationCode: "",
+
+      //更改密码时前后两次输入的密码
       psw1:"",
       psw2:""
     }
   },
   methods:{
     doEdit(){
-      this.edit=!this.edit
+      if(!this.edit) {//处于编辑状态，点击按钮保存修改
+        let _this = this
+        updatePersonInfo(_this.phoneNumber,null,_this.name,_this.verificationCode).then(res =>  {
+          _this.edit=true
+        }).catch(err => {
+          _this.edit=false
+        })
+      }
+      this.edit=!this.edit  //编辑状态和浏览状态切换
     },
     getMyPersonalInfos(){
       let _this = this
@@ -202,11 +218,25 @@ export default {
     },
     changePassword(){
       let _this = this
-      updatePersonInfo(this.phoneNumber,this.psw1,this.name)
+      updatePersonInfo(_this.phoneNumber,_this.md5(_this.psw1),_this.name,_this.verificationCode).then(res =>  {
+        alert("修改密码成功!")
+      }).catch(err => {
+        alert("验证码错误!")
+        console.log(err)
+      })
+    },
+    sendVerificationCode(){
+      let _this = this
+      verificationCode(_this.phoneNumber,"otherType").then(res =>  {
+        alert("验证码已发送!")
+      }).catch(err => {
+        alert("发送验证码失败!")
+        console.log(err)
+      })
     }
   },
   mounted() {
-    this.getMyPersonalInfos()
+    this.getMyPersonalInfos();
   }
 }
 </script>
