@@ -204,6 +204,7 @@ export default {
               dept:jsonObj[i].deptName,
               company:jsonObj[i].companyName
             }
+            _this.items1=_items1Data
           }
         }
         this.is_load="数据获取成功"
