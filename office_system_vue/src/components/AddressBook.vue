@@ -197,7 +197,7 @@ export default {
         if(res.data.status==="success"){
           let jsonObj = JSON.parse(JSON.stringify(res.data.data));
           let _items1Data=[]
-          for(let i=0;i<jsonObj.count;i++){
+          for(let i=0;i<jsonObj.length;i++){
             _items1Data[i]={
               name:jsonObj[i].userName,
               phoneNumber:jsonObj[i].userPhonenumber,
@@ -206,6 +206,7 @@ export default {
             }
           }
         }
+        this.is_load="数据获取成功"
         console.log(res.data.data);
         console.log(_this.items1);
       }).catch(err => {
@@ -282,10 +283,10 @@ export default {
   }
 }
 
-
 </script>
 
 
 <style scoped>
 @import '../assets/css/h3.css';
+
 </style>
