@@ -1,18 +1,18 @@
 import request from "../util/request"
 
 export function uploadFile(file) {
+  let formData = new FormData()
+  formData.append('file',file)
   return request({
-    url: "/uploadFile",
+    url: "/cloudFile/uploadFile",
     method: "post",
-    data: {
-      'file': file
-    }
+    data: formData
   })
 }
 
 export function copyfile(fileId) {
   return request({
-    url: "/copyfile",
+    url: "/cloudFile/copyfile",
     method: "post",
     data: {
       'fileId': fileId
@@ -22,14 +22,14 @@ export function copyfile(fileId) {
 
 export function getMyFiles() {
   return request({
-    url: "/getMyFiles",
+    url: "/cloudFile/getMyFiles",
     method: "get",
   })
 }
 
 export function deleteFile(fileId) {
   return request({
-    url: "/deleteFile",
+    url: "/cloudFile/deleteFile",
     method: "get",
     params: {
       'fileId': fileId
@@ -39,14 +39,14 @@ export function deleteFile(fileId) {
 
 export function getAll() {
   return request({
-    url: "/getAll",
+    url: "/cloudFile/getAll",
     method: "get",
   })
 }
 
 export function search(key) {
   return request({
-    url: "/search",
+    url: "/cloudFile/search",
     method: "get",
     params: {
       'key': key
