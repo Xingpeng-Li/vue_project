@@ -34,7 +34,7 @@
       </b-table>
     </div>
 
-    <!--工作报告模态框 -->
+    <!--发送已批阅报告模态框 -->
     <b-modal ref="reportModal" title="批阅报告">
       <b-form-file
         v-model="reportFile"
@@ -43,8 +43,25 @@
         drop-placeholder="请选择文件！"
       ></b-form-file>
       <template #modal-footer="{send}">
-        <b-button size="mm" variant="primary" @click="reply()">
+        <b-button size="mm" variant="primary" @click="returnReport">
           发送
+        </b-button>
+      </template>
+    </b-modal>
+
+    <!--审批模态框 -->
+    <b-modal ref="applicationModal" :title="applicationType">
+      <b-list-group>
+        <b-list-group-item>申请人：{{applicationSender}}</b-list-group-item>
+        <b-list-group-item>时间：{{applicationStartTime}} - {{applicationEndTime}}</b-list-group-item>
+        <b-list-group-item>理由：{{applicationReason}}</b-list-group-item>
+      </b-list-group>
+      <template #modal-footer="{send}">
+        <b-button size="mm" variant="outline-danger" v-show="approval" @click="disposeApplication(1)">
+          不同意
+        </b-button>
+        <b-button size="mm" variant="outline-primary" v-show="approval" @click="disposeApplication(0)">
+          同意
         </b-button>
       </template>
     </b-modal>
@@ -52,7 +69,9 @@
 </template>
 
 <script>
-import {deleteNotification, getAllNotification} from "../api/notification";
+import {deleteNotification, getAllNotification, readNotification} from "../api/notification";
+import {disposeApplication, getApplication} from "../api/application";
+import {returnReport} from "../api/report";
 
 export default {
   name: "Message",
@@ -60,6 +79,13 @@ export default {
     return {
       optionType: null,     //操作的类型
       reportFile: null,    //回复的报告文件
+      notificationId: '',
+      applicationType: 'XX审批',  //审批类型
+      applicationSender: 'XXX',  //发送者
+      applicationStartTime: '',  //审批开始时间
+      applicationEndTime: '',   //审批结束时间
+      applicationReason: '',   //审批理由
+      approval: null,    //是否是审批的处理者
       notifications: [{}],
       fields: [
         { key: 'checked', label: '状态'},
@@ -76,8 +102,17 @@ export default {
     getAllNotificaions() {
       let _this = this
       getAllNotification().then(res =>  {
-        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
-        _this.notifications = jsonObj
+        if(res.data.status === 'success') {
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          _this.notifications = jsonObj
+        }
+        else {
+          alert("获取失败，"+res.data.data.errMsg)
+          if(res.data.data.errCode === 1||res.data.data.errCode === 20012) {
+            //跳回登陆界面
+            this.$router.push("/")
+          }
+        }
       }).catch(err => {
         alert("消息获取失败!")
         console.log(err)
@@ -96,7 +131,7 @@ export default {
       let value = row.item.type
       if(value==="待批阅报告"){
         return {'show':true, 'type':'回复'}
-      } else if(value==="健康打卡" || value==="考勤打卡"){
+      } else if(value==="健康打卡"){
         return {'show': true, 'type':'前往'}
       }else if(value==="待处理审批"){
         return {'show': true, 'type':'查看'}
@@ -126,9 +161,10 @@ export default {
             }
           }
           else {
-            alert(res.data.errMsg)
+            alert("删除失败，"+res.data.errMsg)
           }
         }).catch(err => {
+          alert("删除失败")
           console.log(err)
         })
       }
@@ -138,18 +174,64 @@ export default {
     },
     execOption(row) {
       let value = row.item.type  //根据type的不同执行不同的操作
+      this.notificationId = row.item.notificationId
       if(value==="待批阅报告"){
-        this.$refs['']
-      } else if(value==="健康打卡" || value==="考勤打卡"){
-        return {'show': true, 'type':'前往'}
-      }else if(value==="待处理审批"){
-        return {'show': true, 'type':'查看'}
-      }else if(value==="待查看审批"){
-        return {'show': true, 'type':'查看'}
+        this.$refs['reportModal'].show()
+      } else if(value==="健康打卡"){
+        readNotification(this.notificationId).then().catch(err => {
+          console.log(err)
+        })
+        this.$router.push('/healthPunchin')
+      }else if(value==="待处理审批" || value==="待查看审批"){
+        this.approval = value !== "待查看审批";
+        this.applicationSender = row.item.senderName
+        this.applicationStartTime = ''
+        this.applicationEndTime = ''
+        this.applicationReason = ''
+        getApplication(row.item.notificationId).then(res => {
+          //获得审批
+          if(res.data.status === 'success') {
+            this.applicationStartTime = res.data.data.startTime
+            this.applicationEndTime = res.data.data.endTime
+            this.applicationReason = res.data.data.reason
+          }
+          else {
+            alert("获取失败，"+res.data.data.errMsg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+        this.$refs['applicationModal'].show()
       }
     },
-    reply() {
-      alert("发送")
+    returnReport() {
+      //回复报告
+      returnReport(this.reportFile,this.notificationId).then(res => {
+        if(res.data.status === 'success') {
+          alert("回复成功！")
+          this.$refs['reportModal'].hide()
+        }
+        else {
+          alert("回复失败，"+res.data.data.errMsg)
+        }
+      }).catch(err => {
+        alert("回复失败")
+        console.log(err)
+      })
+    },
+    disposeApplication(isAgree) {
+      disposeApplication(this.notificationId,isAgree).then(res => {
+        if(res.data.status === 'success') {
+          alert("处理成功！")
+          this.$refs['applicationModal'].hide()
+        }
+        else {
+          alert("处理失败，"+res.data.data.errMsg)
+        }
+      }).catch(err => {
+        alert("处理失败")
+        console.log(err)
+      })
     }
   },
   mounted() {
