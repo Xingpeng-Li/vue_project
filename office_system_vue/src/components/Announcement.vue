@@ -25,18 +25,18 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1 @click="loadAnnouncementInfo(row)">
                   <b-icon icon="eye"></b-icon>
-
                 </b-button>
               </template>
 
             </b-table>
           </b-tab>
 
-          <b-modal id="modal-1" title="公告标题" hide-footer>
-            <h9>公告内容</h9><br><br>
-            <b-link href="http://www.baidu.com">财务部通知.word</b-link>
+          <!--公告详情模态框-->
+          <b-modal id="modal-1" :title="announcementTitle" hide-footer size="xl">
+            {{announcementBody}}<br><br>
+            <b-link :href="announcementFile">{{announcementFile}}</b-link>
           </b-modal>
 
           <b-tab title="部门公告" >
@@ -52,7 +52,7 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1 @click="loadAnnouncementInfo(row)">
                   <b-icon icon="eye"></b-icon>
 
                 </b-button>
@@ -73,7 +73,7 @@
                 {{ row.value }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+                <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1 @click="loadAnnouncementInfo(row)">
                   <b-icon icon="eye"></b-icon>
 
                 </b-button>
@@ -92,39 +92,56 @@
 
 <script>
 
+import {getAnnouncement} from "../api/announcement";
+
 export default {
   data() {
     return {
       fields: [
-        { key: 'title', label: '标题'},
-        { key: 'time', label: '时间'},
-        { key: 'actions', label: '预览' }
+        { key: 'announcementTitle', label: '标题'},
+        { key: 'announcementTime', label: '时间'},
+        { key: 'actions', label: '预览' },
       ],
 
       companyAnnouncements:[
-        {'title':'百度百度百度百度百度百度百度百度百度','time':'2020/11/18','fileUrl':'https://www.baidu.com'},
-        {'title':'2','time':'2','fileUrl':''},
       ],
       departmentAnnouncements:[
-        {'title':'1','time':'1','fileUrl':'https://www.baidu.com'},
-        {'title':'2','time':'2','fileUrl':'https://www.nowcoder.com/'},
-        {'title':'3','time':'3','fileUrl':'3'},
       ],
       systemAnnouncements:[
-        {'title':'1','time':'1','fileUrl':'https://www.baidu.com'},
-        {'title':'2','time':'2','fileUrl':'2'},
-        {'title':'3','time':'3','fileUrl':'http://code.z01.com/bootstrap-vue/docs/components/form-input.html'},
-      ]
+      ],
+
+
+      //单个公告
+      announcementTitle:"",
+      announcementBody:"",
+      announcementFile:"",
     }
   },
-  methods: {
-
+  methods:{
+    getAllAnnouncements(){
+      let _this=this
+      getAnnouncement("company").then(res =>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.companyAnnouncements=jsonObj
+      })
+      getAnnouncement("dept").then(res =>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.departmentAnnouncements=jsonObj
+      })
+      getAnnouncement("system").then(res =>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.systemAnnouncements=jsonObj
+      })
+    },
+    loadAnnouncementInfo(row){//点击单个公告时加载公告内容
+      console.log(row.item);
+      this.announcementTitle=row.item.announcementTitle;
+      this.announcementBody=row.item.announcementBody;
+      this.announcementFile=row.item.announcementFile;
+    }
   },
-  computed: {
-
-  },
-  mounted:{
-
+  mounted(){
+    this.getAllAnnouncements()
   }
 }
 </script>
