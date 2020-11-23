@@ -8,120 +8,141 @@
       </h3>
       <hr>
     </div>
-    <!--通讯录界面主体部分-->
-    <div style="margin-right: auto">
-      <!--进行局部界面显示的三个按钮 -->
-      <div>
-          <b-button variant="outline-dark" size="sm" @click="showAllLink">
-            全部联系人
-          </b-button>
-          <b-button variant="outline-dark" size="sm" @click="showDeptLink">
-            部门联系人
-          </b-button>
-          <b-button variant="outline-dark" size="sm" @click="showAddDept">
-            添加部门
-          </b-button>
-      </div>
-      <!--三个相对独立的通讯录功能界面      -->
-      <div id="test1">
-        <!--全部联系人界面 -->
-        <div v-if="is_show_num===1">
-          <!--表格上方的加载提示 -->
+    <b-card class="card" no-body align="center">
+      <!--通讯录界面主体部分-->
+      <b-tabs pills card vertical>
+        <div style="margin-right: auto">
+          <!--三个相对独立的通讯录功能界面 -->
           <div>
-            <b-alert show variant="primary">{{is_load}}</b-alert>
-          </div>
-          <!--全部联系人表格 -->
-          <div>
-            <b-table striped hover :items="items1" :fields="fields1">
+            <!--全部联系人界面 -->
+            <b-tab title="全部联系人" active onclick="allContacts">
+              <b-card-body>
+                <div>
+                  <!--表格上方的加载提示 -->
+                  <div>
+                    <b-alert show variant="primary">{{is_load}}</b-alert>
+                  </div>
+                  <!--全部联系人表格-->
+                  <b-table hover :items="items1" :fields="fields1">
+                    <template v-slot:cell(content)="row">
+<!--                      <div>-->
+<!--                        <b-modal id="bv-modal-content" hide-footer>-->
+<!--&lt;!&ndash;                          <div class="d-block text-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <b-form-input id="input1" :disabled="true" v-model="mailContent"></b-form-input>&ndash;&gt;-->
+<!--&lt;!&ndash;                          </div>&ndash;&gt;-->
+<!--                        </b-modal>-->
+<!--                      </div>-->
+                    </template>
+                  </b-table>
+                </div>
+              </b-card-body>
+            </b-tab>
+            <!--部门联系人界面 -->
+            <b-tab title="部门联系人" active onclick="
+import {getDeptContact} from '../api/user';
+getDeptContact">
+              <b-card-body>
+                <div>
+                  <!--部门联系人表格-->
+                  <b-table hover :items="items2" :fields="fields2">
+                    <template v-slot:cell(content)="row">
+<!--                      <div>-->
+<!--                        <b-modal id="bv-modal-content" hide-footer>-->
+<!--                          &lt;!&ndash;                          <div class="d-block text-center">&ndash;&gt;-->
+<!--                          &lt;!&ndash;                            <b-form-input id="input1" :disabled="true" v-model="mailContent"></b-form-input>&ndash;&gt;-->
+<!--                          &lt;!&ndash;                          </div>&ndash;&gt;-->
+<!--                        </b-modal>-->
+<!--                      </div>-->
+                    </template>
+                  </b-table>
+                  <!--导入文件模块 -->
+                  <div>
+                    <br><br>
+                    <div>
+                      <b-button variant="outline-dark" size="sm" >
+                        选择文件
+                      </b-button>
+                    </div>
+                    <input type="text"  placeholder="所选文件">
+                    <b-button variant="outline-dark" size="sm" >
+                      导入
+                    </b-button>
+                    <b-button variant="outline-dark" size="sm">
+                      下载模板
+                    </b-button>
+                  </div>
+                </div>
+              </b-card-body>
+            </b-tab>
+            <b-tab title="添加部门" active onclick="
+import {getNoDeptContacts} from '../api/user';
+getNoDeptContacts">
+              <b-card-body>
+                <div>
+                  <!--输入部门名模块 -->
+                  <div>
+                    <b-input-group class="mt-3">
+                      <template v-slot:prepend>
+                        <p>请输入部门名称</p>
+                      </template>
+                      <b-form-input
+                        aria-describedby="input-live-help input-live-feedback">
+                      </b-form-input>
+                    </b-input-group>
+                  </div>
+                  <div>
+                    <p>请选择管理员</p>
+                    <!--表格上方的加载提示 -->
+                    <div>
+                      <b-alert show variant="primary">{{is_load}}</b-alert>
+                    </div>
+                    <!--无部门人员表 -->
+                    <b-table hover :items="items3" :fields="fields3">
+                      <template v-slot:cell(content)="row">
+<!--                        <div>-->
+<!--                          <b-modal id="bv-modal-content" hide-footer>-->
+<!--                            &lt;!&ndash;                          <div class="d-block text-center">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <b-form-input id="input1" :disabled="true" v-model="mailContent"></b-form-input>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                          </div>&ndash;&gt;-->
+<!--                          </b-modal>-->
+<!--                        </div>-->
+                      </template>
+                    </b-table>
+                  </div>
+                  <!--选择部门成员模块 -->
+                  <div>
+                    <p>请选择部门成员</p>
+                    <!--表格上方的加载提示 -->
+                    <div>
+                      <b-alert show variant="primary">{{is_load}}</b-alert>
+                    </div>
 
-            </b-table>
+                    <!--无部门人员表 -->
+                    <b-table hover :items="items3" :fields="fields3">
+                      <template v-slot:cell(content)="row">
+<!--                        <div>-->
+<!--                          <b-modal id="bv-modal-content" hide-footer>-->
+<!--                            &lt;!&ndash;                          <div class="d-block text-center">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <b-form-input id="input1" :disabled="true" v-model="mailContent"></b-form-input>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                          </div>&ndash;&gt;-->
+<!--                          </b-modal>-->
+<!--                        </div>-->
+                      </template>
+                    </b-table>
+                    <!--提交按钮 -->
+                    <div>
+                      <b-button variant="outline-dark" size="sm">
+                        确定
+                      </b-button>
+                    </div>
+                  </div>
+                </div>
+              </b-card-body>
+            </b-tab>
           </div>
-
         </div>
-        <!--部门联系人界面 -->
-        <div v-else-if="is_show_num===2">
-          <!--表格上方的加载提示 -->
-          <div>
-            <b-alert show variant="primary">{{is_load}}</b-alert>
-          </div>
-          <!--部门联系人表格 -->
-          <div>
-            <b-table striped hover :items="items2" :fields="fields2">
-
-            </b-table>
-          </div>
-          <!--导入文件模块 -->
-          <div>
-            <br><br>
-            <div>
-              <b-button variant="outline-dark" size="sm" @click="showAddDept">
-                选择文件
-              </b-button>
-            </div>
-            <input type="text" id="fileName" placeholder="所选文件">
-            <b-button variant="outline-dark" size="sm" @click="showAddDept">
-              导入
-            </b-button>
-            <b-button variant="outline-dark" size="sm" @click="showAddDept">
-              下载模板
-            </b-button>
-          </div>
-        </div>
-        <!--添加部门界面 -->
-        <div v-else-if="is_show_num===3">
-          <!--输入部门名模块 -->
-          <div>
-            <b-input-group class="mt-3">
-              <template v-slot:prepend>
-                <p>请输入部门名称</p>
-              </template>
-              <b-form-input
-                aria-describedby="input-live-help input-live-feedback">
-              </b-form-input>
-            </b-input-group>
-          </div>
-          <!--选择部门管理员模块 -->
-          <div>
-            <p>请选择管理员</p>
-            <!--表格上方的加载提示 -->
-            <div>
-              <b-alert show variant="primary">{{is_load}}</b-alert>
-            </div>
-
-            <!--无部门人员表 -->
-            <div>
-              <b-table striped hover :items="items3" :fields="fields3">
-
-              </b-table>
-            </div>
-          </div>
-
-          <!--选择部门成员模块 -->
-          <div>
-            <p>请选择部门成员</p>
-            <!--表格上方的加载提示 -->
-            <div>
-              <b-alert show variant="primary">{{is_load}}</b-alert>
-            </div>
-
-            <!--无部门人员表 -->
-            <div>
-              <b-table striped hover :items="items3" :fields="fields3">
-
-              </b-table>
-            </div>
-
-          </div>
-          <!--提交按钮 -->
-          <div>
-            <b-button variant="outline-dark" size="sm" @click="showAddDept">
-              确定
-            </b-button>
-          </div>
-        </div>
-
-      </div>
-    </div>
+      </b-tabs>
+    </b-card>
   </div>
 </template>
 
@@ -135,8 +156,6 @@ export default {
   name:"AddressBook",
   data(){
     return{
-      //标记当前显示的功能框
-      is_show_num:1,
       //显示加载中信息
       is_load:"正在努力地加载数据中，请稍候",
       //全部联系人界面的表格
@@ -167,18 +186,6 @@ export default {
 
   },
   methods: {
-    //跳转至全部联系人
-    showAllLink(){
-      this.is_show_num=1;
-    },
-    //跳转至部门联系人
-    showDeptLink(){
-      this.is_show_num=2;
-    },
-    //跳转至部门联系人
-    showAddDept(){
-      this.is_show_num=3;
-    },
     //更新数据加载时的提示信息
     updateTip(){
 
@@ -186,20 +193,47 @@ export default {
     //获取所有联系人数据
     getCompanyContact() {
       let _this = this
-      getCompanyContact.then(res =>  {
-        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
-        _this.items1 = jsonObj
+      getCompanyContact().then(res =>  {
+        if(res.data.status==="success"){
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          let _items1Data=[]
+          for(let i=0;i<jsonObj.count;i++){
+            _items1Data[i]={
+              name:jsonObj[i].userName,
+              phoneNumber:jsonObj[i].userPhonenumber,
+              dept:jsonObj[i].deptName,
+              company:jsonObj[i].companyName
+            }
+          }
+        }
+        console.log(res.data.data);
+        console.log(_this.items1);
       }).catch(err => {
-        alert("消息获取失败!")
+        alert("联系人信息获取失败!")
         console.log(err)
       })
+    },
+    optionShow(row){
+      let value = row.item.type
+      if(value==="姓名"){
+        return {'show':true, 'type':''}
+      } else if(value==="手机号码"){
+        return {'show': true, 'type':''}
+      }else if(value==="部门"){
+        return {'show': true, 'type':''}
+      }else if(value==="公司"){
+        return {'show': true, 'type':''}
+      }
+      return {'show':false}
     },
     //获取自由联系人数据
     getNoDeptContacts() {
       let _this = this
-      getNoDeptContacts.then(res =>  {
-        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
-        _this.items3 = jsonObj
+      getNoDeptContacts().then(res =>  {
+        if(res.data.status==="success"){
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          _this.items3 = jsonObj
+        }
       }).catch(err => {
         alert("消息获取失败!")
         console.log(err)
@@ -208,17 +242,31 @@ export default {
     //获取部门联系人数据
     getDeptContact() {
       let _this = this
-      getDeptContact.then(res =>  {
-        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
-        _this.items2 = jsonObj
+      getDeptContact().then(res =>  {
+        if(res.data.status==="success"){
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          _this.items2 = jsonObj
+        }
       }).catch(err => {
-        alert("消息获取失败!")
+        alert("联系人数据获取失败!")
         console.log(err)
       })
     },
+    //全部联系人界面跳转
+    allContacts(){
+      this.getCompanyContact();
+    },
+    //部门联系人界面跳转
+    deptContacts(){
+      this.getNoDeptContacts();
+    },
+    //全部联系人界面跳转
+    noDeptContacts(){
+      this.getNoDeptContacts();
+    },
     //下载用户excel模板
     download(){
-      window.location.href="https://studyresource-1301994676.cos.ap-chengdu.myqcloud.com/User.xlsx";
+      window.location.href="https://officesystem-1304131169.cos.ap-nanjing.myqcloud.com/officesystemCloudFile/User.xlsx";
     },
 
     //添加一个部门
@@ -228,8 +276,8 @@ export default {
 
   },
   mounted() {
-    this.getNoDeptContacts()
-    this.getDeptContact()
+    // this.getNoDeptContacts()
+    // this.getDeptContact()
     this.getCompanyContact()
   }
 }

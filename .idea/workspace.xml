@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="189cfffc-7e18-4174-8602-f70b8519092f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/office_system_vue/src/components/AddressBook.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/api/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/AddressBook.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/AddressBook.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/components/Message.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/office_system_vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/office_system_vue/src/router/index.js" afterDir="false" />
     </list>
@@ -52,6 +54,8 @@
       <workItem from="1605533626636" duration="3648000" />
       <workItem from="1605581510459" duration="17889000" />
       <workItem from="1605652489157" duration="3569000" />
+      <workItem from="1605719396564" duration="9835000" />
+      <workItem from="1606110782672" duration="3573000" />
     </task>
     <servers />
   </component>
@@ -59,9 +63,9 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1605596945048">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1605722990573">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1605596945048" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1605722990573" />
   </component>
 </project>

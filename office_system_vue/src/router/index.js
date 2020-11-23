@@ -10,6 +10,7 @@ import Approval from "../components/Approval";
 import AddressBook  from "../components/AddressBook";
 import CloudFile from "../components/CloudFile";
 import Report from "../components/Report";
+import Mail from "../components/Mail";
 
 Vue.use(Router)
 
