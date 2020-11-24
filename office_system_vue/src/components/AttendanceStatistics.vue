@@ -4,7 +4,7 @@
     <hr>
     <b-card class="myCard" no-body align="center">
       <b-tabs pills card>
-        <b-tab title="健康打卡统计" @click="getDeptUser" active>
+        <b-tab title="健康打卡统计" @click="getDeptUser()" active>
           <b-card-body>
             <div role="group">
               <div>
@@ -44,7 +44,7 @@
           </b-card-body>
 <!--          <b-button variant="primary" @click="getDeptUser">查看</b-button>-->
         </b-tab>
-        <b-tab title="考勤打卡统计" @click="getPunchinCount">
+        <b-tab title="考勤打卡统计" @click="getPunchinCount()">
           <b-card-body>
             <div role="group">
               <div>
@@ -102,17 +102,22 @@ export default {
       name: "AttendanceStatistics",
       all:'',
       not:'',
-      already: ''
+      already: '',
+      // punchinAll:'',
+      // punchinNot:'',
+      // punchinAlready: '',
+      statistic: [{}]
     }
   },
   methods:{
     getDeptUser(){
       getDeptUser().then(res=>{
         if(res.data.status === 'success') {
-          this.all = data.data["总人数"];
-          this.already = data.data["已打卡"];
-          this.not = data.data["未打卡"];
-          //this.$router.push('/statistic')
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+         this.statistic = jsonObj
+          this.all = jsonObj["总人数"];
+          this.already = jsonObj["已打卡"];
+          this.not = jsonObj["未打卡"];
         }
         else {
           console.log(res.data)
@@ -123,10 +128,11 @@ export default {
     getPunchinCount(){
       getPunchinCount().then(res=>{
         if(res.data.status === 'success') {
-          this.all = data.data["总人数"];
-          this.already = data.data["已打卡"];
-          this.not = data.data["未打卡"];
-          //this.$router.push('/statistic')
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          this.statistic = jsonObj
+          this.all = jsonObj["总人数"];
+          this.already = jsonObj["已打卡"];
+          this.not = jsonObj["未打卡"];
         }
         else {
           console.log(res.data)

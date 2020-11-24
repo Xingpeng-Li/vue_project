@@ -1,6 +1,7 @@
 import request from '../util/request'
 
 export function login(phoneNumber,verificationCode) {
+
   return request({
     url: "/loginByPhone",
     method: "post",

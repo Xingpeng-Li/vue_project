@@ -2,14 +2,14 @@
 import request from "../util/request"
 
 export function sendAnnouncement(type,title,body) {
+  let formData = new FormData();
+  formData.append('type',type);
+  formData.append('title',title);
+  formData.append('body',body);
   return request({
     url: "/announcement/send",
     method: "post",
-    data: {
-      'type': type,
-      'title': title,
-      'body': body
-    }
+    data: formData
   })
 }
 

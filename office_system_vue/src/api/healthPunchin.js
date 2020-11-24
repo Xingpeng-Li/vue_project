@@ -10,17 +10,17 @@ export function healthExcel() {
 }
 
 export function health(usertemperature,usercity,userprovince,HealthStatus,ContactSuspectedCase,PunchinNote) {
+  let formData = new FormData();
+  formData.append('usertemperature',usertemperature);
+  formData.append('usercity',usercity);
+  formData.append('userprovince',userprovince);
+  formData.append('HealthStatus',HealthStatus);
+  formData.append('ContactSuspectedCase',ContactSuspectedCase);
+  formData.append('PunchinNote',PunchinNote);
   return request({
     url: "/user/health",
     method: "post",
-    data:{
-      'usertemperature': usertemperature,
-      'usercity': usercity,
-      'userprovince': userprovince,
-      'HealthStatus': HealthStatus,
-      'ContactSuspectedCase': ContactSuspectedCase,
-      'PunchinNote': PunchinNote
-    }
+    data:formData
   })
 }
 
