@@ -18,11 +18,11 @@ export function deleteNotification(notificationId) {
 }
 
 export function readNotification(notificationId) {
+  let formData = new FormData()
+  formData.append('notificationId',notificationId)
   return request({
     url: "/notification/read",
-    method: "get",
-    params: {
-      'notificationId': notificationId
-    }
+    method: "post",
+    data: formData
   })
 }

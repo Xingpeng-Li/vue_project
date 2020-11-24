@@ -4,7 +4,7 @@ export function getDeptContact() {
   //查询接口
   return request({
     url: "/getDeptContacts",
-    method: "get"
+    method: "get",
   })
 }
 
@@ -12,7 +12,7 @@ export function getCompanyContact() {
   //查询接口
   return request({
     url: "/getCompanyContacts",
-    method: "get"
+    method: "get",
   })
 }
 
@@ -21,7 +21,7 @@ export function getNoDeptContacts() {
   //查询接口
   return request({
     url: "/getNoDeptContacts",
-    method: "get"
+    method: "get",
   })
 }
 
@@ -45,7 +45,7 @@ export function getMyPersonalInfo() {
   //查询接口
   return request({
     url: "/getMyPersonalInfo",
-    method: "get"
+    method: "get",
   })
 }
 
