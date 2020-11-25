@@ -12,69 +12,78 @@
       <b-card>
 
         <b-input-group>
-          <b-form-input style="max-width: 600px;margin-left: 200px;margin-right: 50px"></b-form-input>
-          <b-button variant="outline-success" style="margin-right: 50px">搜索</b-button>
+          <b-form-input style="max-width: 600px;margin-left: 200px;margin-right: 50px" v-model="keyword"></b-form-input>
+          <b-button variant="outline-success" style="margin-right: 50px" @click="searchByKeyword">搜索</b-button>
         </b-input-group>
 
         <br>
 
-        <b-tabs pills card vertical>
+        <b-tabs pills card vertical v-model="tabIndex">
 
-          <b-tab title="个人公众号" active >
+          <b-tab title="个人公众号" active @click="loadAllAccounts">
             <b-table
               striped
               :items="personalAccounts"
               :fields="fields"
             >
-              <template v-slot:cell(name)="row">
+              <template v-slot:cell(publicaccountName)="row">
                 {{ row.value }}
               </template>
-              <template v-slot:cell(info)="row">
+              <template v-slot:cell(publicaccountBrief)="row">
                 {{ row.value }}
+              </template>
+              <template v-slot:cell(publicaccountType)="row">
+                {{ row.value==="company"?"企业公众号":"个人公众号" }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2">
-                  <router-link to="/AccountDetail"><b-icon icon="eye"></b-icon></router-link>
+                <b-button size="sm" variant="outline-info" class="mb-2" @click="toDetailAccount(row)">
+                  <b-icon icon="eye"></b-icon>
                 </b-button>
               </template>
             </b-table>
           </b-tab>
 
-          <b-tab title="企业公众号" >
+          <b-tab title="企业公众号" @click="loadAllAccounts">
             <b-table
               striped
               :items="companyAccounts"
               :fields="fields"
             >
-              <template v-slot:cell(name)="row">
+              <template v-slot:cell(publicaccountName)="row">
                 {{ row.value }}
               </template>
-              <template v-slot:cell(info)="row">
+              <template v-slot:cell(publicaccountBrief)="row">
                 {{ row.value }}
+              </template>
+              <template v-slot:cell(publicaccountType)="row">
+                {{ row.value==="company"?"企业公众号":"个人公众号" }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2">
-                  <router-link to="/AccountDetail"><b-icon icon="eye"></b-icon></router-link>
+                <b-button size="sm" variant="outline-info" class="mb-2" @click="toDetailAccount(row)">
+                  <b-icon icon="eye"></b-icon>
                 </b-button>
               </template>
             </b-table>
           </b-tab>
 
-          <b-tab title="收藏公众号" >
+          <b-tab title="收藏公众号" @click="loadAllAccounts">
             <b-table
               striped
               :items="collectionAccounts"
               :fields="fields"
             >
-              <template v-slot:cell(name)="row">
+              <template v-slot:cell(publicaccountName)="row">
                 {{ row.value }}
               </template>
-              <template v-slot:cell(info)="row">
+              <template v-slot:cell(publicaccountBrief)="row">
                 {{ row.value }}
+              </template>
+              <template v-slot:cell(publicaccountType)="row">
+                {{ row.value==="company"?"企业公众号":"个人公众号" }}
               </template>
               <template v-slot:cell(actions)="row">
-                <b-button size="sm" variant="outline-info" class="mb-2">
-                  <router-link to="/AccountDetail"><b-icon icon="eye"></b-icon></router-link>
+                <b-button size="sm" variant="outline-info" class="mb-2" @click="toDetailAccount(row)">
+                  <b-icon icon="eye"></b-icon>
                 </b-button>
               </template>
             </b-table>
@@ -124,7 +133,7 @@
                     </template>
                   </b-input-group>
 
-                  <b-button variant="primary" @click="">创建</b-button>
+                  <b-button variant="primary" @click="createAccount">创建</b-button>
                 </div>
               </b-card-body>
             </b-card>
@@ -142,9 +151,14 @@
 
 <script>
 
+import {myPublicAccounts,companyPublicAccounts,allSubscribePublicAccounts,createPersonalAccount,createCompanyAccount,search} from "../api/publicAccount";
+
 export default {
   data() {
     return {
+
+      //选项卡下标
+      tabIndex:0,
 
       //创建公众号使用的字段
       name:'',
@@ -158,38 +172,79 @@ export default {
 
       //显示公众号table使用的字段
       fields: [
-        { key: 'name', label: '名字'},
-        { key: 'info', label: '简介'},
+        { key: 'publicaccountName', label: '名字'},
+        { key: 'publicaccountBrief', label: '简介'},
+        { key: 'publicaccountType', label: '类型'},
         { key: 'actions', label: '操作' }
       ],
       personalAccounts:[
-        {'name':"武汉大学学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学计算机学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学化学与分子学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
       ],
       companyAccounts:[
-        {'name':"武汉大学学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学计算机学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学化学与分子学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
       ],
       collectionAccounts:[
-        {'name':"武汉大学学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学计算机学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
-        {'name':"武汉大学化学与分子学院学生会",'info':"武汉大学学生会创办的公众号",'':''},
+        {'publicaccountName':"武汉大学学生会",'publicaccountBrief':"武汉大学学生会创办的公众号",
+          'publicaccountId':'10','publicaccountOwner':'','publicaccountType':''},
       ],
 
+      keyword:"",//搜索公众号使用的关键字
+      searchAccounts:[//搜索到的公众号
+      ],
     }
   },
   methods: {
-
+    loadAllAccounts(){//界面初始化时加载所有公众号
+      let _this=this
+      myPublicAccounts().then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.personalAccounts=jsonObj;
+      })
+      companyPublicAccounts().then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.companyAccounts=jsonObj;
+      })
+      allSubscribePublicAccounts().then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.collectionAccounts=jsonObj;
+      })
+    },
+    searchByKeyword() {//搜索公众号
+      let _this=this;
+      search(this.keyword).then(res=> {
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.searchAccounts = jsonObj;
+        _this.tabIndex=0;
+        _this.personalAccounts=_this.searchAccounts;
+        }
+      )
+    },
+    createAccount(){
+      console.log(this.selectedKind)
+      if(this.selectedKind===1){
+        createPersonalAccount(this.name,this.info)
+      }else if(this.selectedKind===2){
+        createCompanyAccount(this.name,this.info)
+      }
+    },
+    toDetailAccount(row){//跳转到详情界面
+      this.$router.push({
+        name: 'AccountDetail',
+        params: {
+          accountID: row.item.publicaccountId,
+          accountName:row.item.publicaccountName,
+          accountInfo:row.item.publicaccountBrief,
+        }}
+        );
+      //this.$router.push({path:'/AccountDetail',query:{accountID:row.item.publicaccountId}});
+      console.log(row.item.publicaccountId)
+    }
   },
-  computed: {
+  computed:{
     nameState(){
       return this.name!==''
     }
   },
   mounted(){
-
+    this.loadAllAccounts()
   }
 }
 </script>
