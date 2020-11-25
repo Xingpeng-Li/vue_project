@@ -3,18 +3,18 @@
   <div class="accountDetail">
     <b-card>
       <div>
-        <h1>公众号名</h1>
+        <h1>{{ accountName }}</h1>
         <hr>
       </div>
 
       <div>
-        <h6>公众号简介</h6>
+        <h6>{{ accountInfo }}</h6>
         <hr>
       </div>
 
       <div>
         <b-button-group class="float-right">
-          <b-button variant="primary" v-b-modal.modal-2>
+          <b-button variant="primary" v-b-modal.modal-2 v-show="canWrite">
             <b-icon icon="pen"></b-icon>
           </b-button>
           <b-button variant="primary" @click="collect">
@@ -29,73 +29,90 @@
         :items="passages"
         :fields="fields"
       >
-        <template v-slot:cell(name)="row">
+        <template v-slot:cell(postTitle)="row">
           {{ row.value }}
         </template>
-        <template v-slot:cell(info)="row">
+        <template v-slot:cell(postBrief)="row">
           {{ row.value }}
         </template>
-        <template v-slot:cell(time)="row">
+        <template v-slot:cell(postDate)="row">
           {{ row.value }}
         </template>
         <template v-slot:cell(actions)="row">
-          <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1>
+          <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1 @click="loadPost(row)">
             <b-icon icon="eye"></b-icon>
           </b-button>
         </template>
       </b-table>
     </b-card>
 
-    <b-modal id="modal-1" title="文章标题" hide-footer size="xl">
-      <h9>文章内容</h9><br><br>
-      <b-img src="https://picsum.photos/300/150/?image=41" fluid alt="Fluid image"></b-img>
+    <b-modal id="modal-1" :title="title" hide-footer size="xl">
+      <h9>{{body}}}</h9><br><br>
+      <b-img :src="picture" fluid ></b-img>
     </b-modal>
 
     <!--写文章弹出的模态框-->
     <b-modal id="modal-2" title="写文章" hide-footer size="xl">
-      <pre class="mt-3 mb-0">{{ w_title }}</pre>
+      <pre class="mt-3 mb-0"></pre>
       <h9>标题</h9>
       <b-form-textarea
         id="textarea"
-        v-model="text"
+        v-model="w_title"
         placeholder="请在此输入标题"
         rows="3"
         max-rows="6"
       ></b-form-textarea>
-      <pre class="mt-3 mb-0">{{ w_title }}</pre>
+      <pre class="mt-3 mb-0"></pre>
       <h9>简介</h9>
       <b-form-textarea
         id="textarea"
-        v-model="text"
+        v-model="w_info"
         placeholder="请在此输入简介"
         rows="3"
         max-rows="6"
       ></b-form-textarea>
-      <pre class="mt-3 mb-0">{{ w_info }}</pre>
+      <pre class="mt-3 mb-0"></pre>
       <h9>正文</h9>
       <b-form-textarea
         id="textarea"
-        v-model="text"
+        v-model="w_text"
         placeholder="请在此输入正文"
         rows="3"
         max-rows="6"
       ></b-form-textarea>
-      <pre class="mt-3 mb-0">{{ w_text }}</pre>
+      <pre class="mt-3 mb-0"></pre>
       <br>
       <h9>选择想要上传的图片</h9>
       <b-form-file v-model="w_picture" class="mt-3" plain></b-form-file>
+      <b-button variant="outline-primary" align="center" @click="writePassage">发表</b-button>
     </b-modal>
 
   </div>
 </template>
 
 <script>
+
+import {getAllPosts,subscribe,createPost} from "../api/publicAccount";
+
 export default {
   data(){
     return{
 
+      accountID:"",
+      accountName:"",
+      accountInfo:"",
+
       //是否已经收藏
       isCollected:false,
+
+      //文章的具体信息
+      title:"",
+      info:"",
+      body:"",
+      picture:"",
+
+      //写文章给你的权限
+      canWrite:false,
 
       //写文章
       w_title:"",
@@ -104,17 +121,13 @@ export default {
       w_picture:'',
 
       fields:[
-        { key: 'title', label: '标题'},
-        { key: 'info', label: '简介'},
-        { key: 'time', label: '发布时间'},
+        { key: 'postTitle', label: '标题'},
+        { key: 'postBrief', label: '简介'},
+        { key: 'postDate', label: '发布时间'},
         { key: 'actions', label: '操作' }
       ],
       passages:[
-        {'title':'1','info':'1','time':'1'},
-        {'title':'2','info':'2','time':'2'},
-        {'title':'3','info':'3','time':'3'},
-        {'title':'4','info':'4','time':'4'},
-        {'title':'5','info':'5','time':'5'},
+        {'postId':'5','postDate':'5','postImage':'5','postBrief':"","postTitle":"","postBody":""},
       ],
 
     }
@@ -123,8 +136,41 @@ export default {
 
     collect(){//收藏公众号
       this.isCollected=!this.isCollected;
-      //接接口
+      subscribe(this.accountID).then(res=>{
+        console.log(JSON.parse(JSON.stringify(res.data)));
+
+      })
+    },
+    loadDetail(){//初始化
+      this.accountID=this.$route.params.accountID;
+      this.accountName=this.$route.params.accountName;
+      this.accountInfo=this.$route.params.accountInfo;
+      //this.accountID=this.$route.query.accountID;
+      //console.log(this.accountID)
+      let _this=this
+      getAllPosts(this.accountID).then(res =>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        _this.passages=jsonObj
+      })
+      createPost(this.accountID).then(res=>{
+        _this.canWrite = JSON.parse(JSON.stringify(res.data.data));
+      })
+    },
+    loadPost(row){//点开单个Post
+      this.title=row.item.postTitle;
+      this.info=row.item.postBrief;
+      this.body=row.item.postBody;
+      this.picture=row.item.postImage;
+    },
+    writePassage(){//写文章
+      //
     }
+  },
+  computed:{
+
+  },
+  mounted() {
+    this.loadDetail()
   }
 }
 </script>
