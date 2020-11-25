@@ -8,25 +8,29 @@
             <div>
               <b-table hover :items="mails" :fields="fields">
                 <template v-slot:cell(content)="row">
-<!--                  <div class="modal fade bs-example-modal-lg">-->
                     <b-button id="show-btn" size="sm" v-b-modal.bv-modal-content @click="showContent(row)"  class="mr-1">
                       查看
                     </b-button>
-                    <b-modal id="bv-modal-content" hide-footer>
+                    <b-modal id="bv-modal-content" size="xl"  scrollable="true" v-model="show">
                       <template #modal-title>
                         邮件内容
                       </template>
-                      <div class = "modal-dialog" style="width:600px">
                       <div class="d-block text-center">
-<!--                        <textarea size="auto" :disabled="true" style="display: inline-block" v-html="mailContent"></textarea>-->
-                        <p v-html="mailContent"></p>
+                        <span v-html="mailContent"></span>
                       </div>
-                      <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-content')">
-                        关闭
-                      </b-button>
-                      </div>
+                      <template #modal-footer>
+                        <div class="w-100">
+                          <b-button
+                            variant="primary"
+                            size="sm"
+                            class="float-right"
+                            @click="show=false"
+                          >
+                            关闭
+                          </b-button>
+                        </div>
+                      </template>
                     </b-modal>
-<!--                  </div>-->
                 </template>
               </b-table>
 
@@ -165,7 +169,8 @@ export default {
       deleteMail:'',
       newMail:'',
       file:'',
-      mailId:''
+      mailId:'',
+      show: false,
     }
   },
   methods:{
