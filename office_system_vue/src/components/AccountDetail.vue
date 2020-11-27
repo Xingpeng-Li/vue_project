@@ -14,7 +14,7 @@
 
       <div>
         <b-button-group class="float-right">
-          <b-button variant="primary" v-b-modal.modal-2 v-show="canWrite">
+          <b-button variant="primary" v-b-modal.modal-2 v-show="canWrite" @click="write">
             <b-icon icon="pen"></b-icon>
           </b-button>
           <b-button variant="primary" @click="collect">
@@ -47,12 +47,12 @@
     </b-card>
 
     <b-modal id="modal-1" :title="title" hide-footer size="xl">
-      <h9>{{body}}}</h9><br><br>
+      <h9>{{body}}</h9><br><br>
       <b-img :src="picture" fluid ></b-img>
     </b-modal>
 
     <!--写文章弹出的模态框-->
-    <b-modal id="modal-2" title="写文章" hide-footer size="xl">
+    <b-modal ref="modal-2" title="写文章" hide-footer size="xl">
       <pre class="mt-3 mb-0"></pre>
       <h9>标题</h9>
       <b-form-textarea
@@ -163,10 +163,22 @@ export default {
       this.body=row.item.postBody;
       this.picture=row.item.postImage;
     },
+    write(){//弹模态框
+      this.$refs['modal-2'].show()
+    },
     writePassage(){//写文章
+      let _this=this
       writePost(this.w_picture,this.w_title,this.w_text,this.w_info,this.accountID).then(res=>{
         let jsonObj = JSON.parse(JSON.stringify(res));
         console.log(jsonObj)
+        if(jsonObj.data.status==="success"){
+          alert("发表成功")
+          _this.$refs['modal-2'].hide()
+          _this.loadDetail()
+        }else{
+          alert(jsonObj.data.data.errMsg)
+        }
+
       })
     }
   },

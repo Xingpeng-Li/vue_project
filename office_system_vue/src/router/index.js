@@ -17,7 +17,7 @@ import HealthPunchin from "../components/HealthPunchin";
 import WriteAnnouncement from "../components/WriteAnnouncement";
 import LoginToMail from "../components/LoginToMail";
 import PublicAccount from "../components/PublicAccount";
-import ChatRoom from "../components/ChatRoom";
+import AccountDetail from "../components/AccountDetail";
 
 Vue.use(Router)
 
@@ -39,7 +39,7 @@ export default new Router({
     { path: '/writeAnnouncement',name:'WriteAnnouncement',component:WriteAnnouncement,meta:{showNav: true}},
     { path: '/loginToMail',name:'LoginToMail',component:LoginToMail,meta:{showNav: true}},
     { path: '/publicAccount',name:'PublicAccount',component:PublicAccount,meta:{showNav: true}},
-    { path: '/chat',name:'ChatRoom',component:ChatRoom,meta:{showNav: true}},
+    { path: '/accountDetail',name:'AccountDetail',component:AccountDetail,meta:{showNav: true}},
   ],
   mode: "history"
 })

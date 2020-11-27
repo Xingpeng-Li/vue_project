@@ -185,7 +185,6 @@ export default {
       //自由联系人信息
       fields3:  [
         { key:'selected',lable:''},
-        { key: 'userId',lable:'ID'},
         { key: 'name', label: '姓名'},
         { key: 'phoneNumber', label: '手机号码'}
       ],
@@ -195,7 +194,7 @@ export default {
       //添加部门管理员电话
       masterPhoneNumber:'',
       //添加部门人员id
-      userIds:[],
+      userIds:'',
       //选择表类型
       selectMode:'single',
       //选中的管理员信息
@@ -280,11 +279,6 @@ export default {
       })
     },
 
-    //下载用户excel模板
-    download(){
-      window.location.href="";
-    },
-
     //以excel形式导入用户信息
 
     importUser() {
@@ -293,7 +287,6 @@ export default {
         if(res.data.status === 'success') {
           //刷新表格
           alert("导入成功！")
-          this.getDeptContacts()
         }
         else {
           alert("导入失败，"+res.data.errMsg)
@@ -313,7 +306,13 @@ export default {
     addDept(){
       this.masterPhoneNumber=this.selectedDeptMaster[0].phoneNumber
       for(let i=0;i<this.selectedDeptMember.length;i++){
-        this.userIds[i]=this.selectedDeptMember[i].userId
+        if(i===0){
+          this.userIds+=this.selectedDeptMember[i].userId
+
+        }
+        else{
+          this.userIds=this.userIds+","+this.selectedDeptMember[i].userId
+        }
       }
 
       console.log(this.deptName)
@@ -323,14 +322,16 @@ export default {
         if(res.data.status === 'success') {
           //刷新表格
           alert("添加部门成功")
-          this.getDeptContacts()
+          this.userIds=''
         }
         else {
           alert("添加部门失败，"+res.data.errMsg)
+          this.userIds=''
         }
       }).catch(err => {
         console.log(err)
       })
+
     }
 
   },
