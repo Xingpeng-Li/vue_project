@@ -14,6 +14,7 @@
         <div class="display" @click="toAddress">{{selectCity}}</div>
         <v-distpicker @selected='selected' v-show="addInp" style="width: 300px;display: inline-block">
         </v-distpicker>
+<!--        <v-distpicker province="广东省" city="广州市" area="海珠区"></v-distpicker>-->
         <div class="mask" v-show="mask"></div>
       </div>
     </div>
@@ -50,6 +51,9 @@
 <script>
 import VDistpicker from 'v-distpicker'
 import {health} from "../api/healthPunchin";
+
+// Vue.component('v-distpicker', VDistpicker);
+
 export default {
   name: 'HealthPunchin',
   components: { VDistpicker },

@@ -1,37 +1,45 @@
 <template>
   <div class="loginToMail">
     <h1 style="text-align: center">邮箱登录</h1>
-    <div role="group">
-      <b-input-group class="mt-3">
-        <template v-slot:prepend>
-          <b-input-group-text style="width: 90px">
-            <span style="margin: auto">邮箱账号：</span>
-          </b-input-group-text>
-        </template>
-        <b-form-input
-          v-model="userMail"
-          :state="mailState"
-          aria-describedby="input-live-help input-live-feedback"
-          placeholder="邮箱："
-          trim
-        ></b-form-input>
-      </b-input-group>
-      <b-input-group class="mt-3">
-        <template v-slot:prepend>
-          <b-input-group-text style="width: 90px">
-            <span style="margin: auto">授权码：</span>
-          </b-input-group-text>
-        </template>
-        <b-form-input
-          v-model="mailPassword"
-          type="password"
-          :state="passwordState"
-          placeholder="授权码："
-          trim
-        ></b-form-input>
-      </b-input-group>
-    </div>
-    <b-button variant="primary" @click="mailLogin" >登录</b-button>
+    <hr>
+    <b-card class="myCard" no-body align="center">
+      <div role="group">
+        <b-input-group class="mt-3">
+          <template v-slot:prepend>
+            <b-input-group-text style="width: 90px">
+              <span style="margin: auto">邮箱账号：</span>
+            </b-input-group-text>
+          </template>
+          <b-form-input
+            v-model="userMail"
+            :state="mailState"
+            aria-describedby="input-live-help input-live-feedback"
+            placeholder="邮箱："
+            trim
+          ></b-form-input>
+        </b-input-group>
+        <b-input-group class="mt-3">
+          <template v-slot:prepend>
+            <b-input-group-text style="width: 90px">
+              <span style="margin: auto">授权码：</span>
+            </b-input-group-text>
+          </template>
+          <b-form-input
+            v-model="mailPassword"
+            type="password"
+            :state="passwordState"
+            placeholder="授权码："
+            trim
+          ></b-form-input>
+        </b-input-group>
+      </div>
+      <br>
+      <div style="margin: auto">
+        <b-button variant="primary" @click="mailLogin" >登录</b-button>
+        <br>
+        <a href="https://officesystem-1304131169.cos.ap-nanjing.myqcloud.com/officesystemCloudFile/help.pdf">如何获取授权码？</a>
+      </div>
+    </b-card>
   </div>
 </template>
 
@@ -84,5 +92,5 @@ name: "LoginToMail",
 </script>
 
 <style scoped>
-
+@import '../assets/css/myCard.css';
 </style>
