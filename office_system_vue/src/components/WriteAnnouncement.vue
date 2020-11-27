@@ -58,7 +58,7 @@ export default {
   },
   methods:{
     sendAnnouncement(){
-      sendAnnouncement(this.typeSelected,this.title,this.AnnouncementContent).then(res=>{
+      sendAnnouncement(this.file,this.typeSelected,this.title,this.AnnouncementContent).then(res=>{
         if(res.data.status==='success'){
           alert("公告发送成功！");
         }

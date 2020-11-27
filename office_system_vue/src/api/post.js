@@ -10,12 +10,13 @@ export function postDetail(postId) {
   })
 }
 
-export function createPost(file,postTitle,postBody,postBrief) {
+export function createPost(file,postTitle,postBody,postBrief,publicAccountId) {
   let formData = new FormData()
   formData.append('file',file)
   formData.append('postTitle',postTitle)
   formData.append('postBody',postBody)
   formData.append('postBrief',postBrief)
+  formData.append('publicAccountId',publicAccountId)
   return request({
     url: "/post/createPost",
     method: "post",
