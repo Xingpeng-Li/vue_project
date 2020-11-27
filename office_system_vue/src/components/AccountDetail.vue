@@ -84,7 +84,7 @@
       <br>
       <h9>选择想要上传的图片</h9>
       <b-form-file v-model="w_picture" class="mt-3" plain></b-form-file>
-      <b-button variant="outline-primary" align="center" @click="writePassage">发表</b-button>
+      <b-button variant="outline-primary" style="margin-left: 500px" @click="writePassage">发表</b-button>
     </b-modal>
 
   </div>
@@ -92,7 +92,8 @@
 
 <script>
 
-import {getAllPosts,subscribe,createPost} from "../api/publicAccount";
+import {getAllPosts,subscribe,createPost as canPost} from "../api/publicAccount";
+import {createPost as writePost} from "../api/post";
 
 export default {
   data(){
@@ -152,7 +153,7 @@ export default {
         let jsonObj = JSON.parse(JSON.stringify(res.data.data));
         _this.passages=jsonObj
       })
-      createPost(this.accountID).then(res=>{
+      canPost(this.accountID).then(res=>{//是否具有写权限
         _this.canWrite = JSON.parse(JSON.stringify(res.data.data));
       })
     },
@@ -163,7 +164,10 @@ export default {
       this.picture=row.item.postImage;
     },
     writePassage(){//写文章
-      //
+      writePost(this.w_picture,this.w_title,this.w_text,this.w_info,this.accountID).then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res));
+        console.log(jsonObj)
+      })
     }
   },
   computed:{
