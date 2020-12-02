@@ -151,7 +151,8 @@
 
 <script>
 
-import {myPublicAccounts,companyPublicAccounts,allSubscribePublicAccounts,createPersonalAccount,createCompanyAccount,search} from "../api/publicAccount";
+import {myPublicAccounts,companyPublicAccounts,allSubscribePublicAccounts,createPersonalAccount,
+  createCompanyAccount,search} from "../api/publicAccount";
 
 export default {
   data() {
