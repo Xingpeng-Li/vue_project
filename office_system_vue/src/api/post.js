@@ -33,3 +33,13 @@ export function readNotification(notificationId) {
     data: formData
   })
 }
+
+export function deletePost(postId) {
+  let formData = new FormData()
+  formData.append('postId',postId)
+  return request({
+    url: "/post/deletePost",
+    method: "post",
+    data: formData
+  })
+}

@@ -82,3 +82,13 @@ export function subscribe(id) {
     data: formData
   })
 }
+
+export function unsubscribe(id) {
+  let formData = new FormData()
+  formData.append('id',id)
+  return request({
+    url: "/publicAccount/unsubscribe",
+    method: "post",
+    data: formData
+  })
+}

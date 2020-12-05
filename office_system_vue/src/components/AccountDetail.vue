@@ -42,10 +42,14 @@
           <b-button size="sm" variant="outline-info" class="mb-2" v-b-modal.modal-1 @click="loadPost(row)">
             <b-icon icon="eye"></b-icon>
           </b-button>
+          <b-button size="sm" variant="outline-info" class="mb-2" v-show="canWrite" @click="deletePassage(row)">
+            <b-icon icon="trash"></b-icon>
+          </b-button>
         </template>
       </b-table>
     </b-card>
 
+    <!--post详情模态框-->
     <b-modal id="modal-1" :title="title" hide-footer size="xl">
       <h9>{{body}}</h9><br><br>
       <b-img :src="picture" fluid ></b-img>
@@ -92,8 +96,8 @@
 
 <script>
 
-import {getAllPosts,subscribe,createPost as canPost} from "../api/publicAccount";
-import {createPost as writePost} from "../api/post";
+import {getAllPosts,subscribe,unsubscribe,allSubscribePublicAccounts,createPost as canPost} from "../api/publicAccount";
+import {deletePost,createPost as writePost} from "../api/post";
 
 export default {
   data(){
@@ -136,11 +140,30 @@ export default {
   methods:{
 
     collect(){//收藏公众号
-      this.isCollected=!this.isCollected;
-      subscribe(this.accountID).then(res=>{
-        console.log(JSON.parse(JSON.stringify(res.data)));
-
-      })
+      let _this = this
+      if(this.isCollected===true)
+      {
+        unsubscribe(this.accountID).then(res=>{
+          let jsonObj = JSON.parse(JSON.stringify(res));
+          if(jsonObj.data.status==="success"){
+            alert("取消订阅成功")
+          }else{
+            alert(jsonObj.data.data.errMsg)
+          }
+          _this.isCollected=false;
+        })
+      }else{
+        subscribe(this.accountID).then(res=>{
+          let jsonObj = JSON.parse(JSON.stringify(res));
+          console.log(jsonObj)
+          if(jsonObj.data.status==="success"){
+            alert("订阅成功")
+          }else{
+            alert(jsonObj.data.data.errMsg)
+          }
+        })
+        _this.isCollected=true;
+      }
     },
     loadDetail(){//初始化
       this.accountID=this.$route.params.accountID;
@@ -148,7 +171,28 @@ export default {
       this.accountInfo=this.$route.params.accountInfo;
       //this.accountID=this.$route.query.accountID;
       //console.log(this.accountID)
+
+
       let _this=this
+
+      //判断是否已经订阅
+      let allSubscribes = [];
+      allSubscribePublicAccounts().then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+        allSubscribes=jsonObj;
+        //console.log(allSubscribes)
+        //console.log(_this.accountID)
+        for (let a in allSubscribes) {
+          if(allSubscribes[a].publicaccountId===parseInt(_this.accountID)){
+            _this.isCollected=true;
+          }
+          //console.log(_this.accountID)
+          //console.log(allSubscribes[a].publicaccountId)
+        }
+        //console.log(this.isCollected)
+      })
+
+
       getAllPosts(this.accountID).then(res =>{
         let jsonObj = JSON.parse(JSON.stringify(res.data.data));
         _this.passages=jsonObj
@@ -180,7 +224,20 @@ export default {
         }
 
       })
-    }
+    },
+    deletePassage(row){//删除文章
+      let _this=this
+      deletePost(row.item.postId).then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res));
+        console.log(jsonObj)
+        if(jsonObj.data.status==="success"){
+          alert("删除成功")
+        }else{
+          alert(jsonObj.data.data.errMsg)
+        }
+        _this.loadDetail()
+      })
+    },
   },
   computed:{
 
