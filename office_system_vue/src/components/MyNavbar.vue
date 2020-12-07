@@ -9,7 +9,7 @@
           <b-nav-item style="margin-right: 10px">会议</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/cloudfile" :active="$route.name === 'CloudFile'">云空间</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/message" :active="$route.name === 'Message'">
-            消息 <b-badge variant="danger">4</b-badge>
+            消息 <b-badge variant="danger" v-show="uncheckedCount!==0">{{ uncheckedCount }}</b-badge>
           </b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/announcement" :active="$route.name === 'Announcement'">公告栏</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/chat" :active="$route.name === 'ChatRoom'">聊天</b-nav-item>
@@ -113,6 +113,8 @@
 </template>
 
 <script>
+import {getUncheckedCount} from "../api/notification";
+
 export default {
   name: "Header",
   data() {
@@ -131,13 +133,54 @@ export default {
         {body: '系统级程序设计作业', time: '2020/11/20 18:00'},
         {body: 'Linux考试', time: '2020/11/23 18:30'},
         {body: 'Linux作业', time: '2020/11/28 12:30'}
-      ]
+      ],
+      uncheckedCount: null,
+      intervalId: null
     }
   },
   methods: {
     showRouter() {
       console.log(this.$route)
-    }
+    },
+    getUncheckedCount() {
+      //用户尚未登录，退出函数
+      if(this.$route.name === 'Login' || this.$route.name === 'Registration') {
+        return
+      }
+      let this_ = this
+      getUncheckedCount().then(res => {
+        if(res.data.status === 'success') {
+          this_.uncheckedCount = res.data.data.count
+        }
+        else {
+          alert("消息获取失败！")
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    //定时器
+    timer() {
+      // 计时器正在进行中，退出函数
+      if (this.intervalId != null) {
+        return
+      }
+      // 计时器为空，操作
+      this.intervalId = setInterval(() => {
+        this.getUncheckedCount()
+      }, 1000)
+    },
+    // 停止定时器
+    clearTimer() {
+      clearInterval(this.intervalId); //清除计时器
+      this.intervalId = null //设置为null
+    },
+  },
+  created() {
+    this.timer()
+  },
+  destroyed() {
+    this.clearTimer()
   }
 }
 </script>

@@ -95,7 +95,8 @@ export default {
         { key: 'option', label: '操作'},
         { key: 'download', label: '下载'},
         { key: 'delete', label: ''},
-      ]
+      ],
+      intervalId: null
     }
   },
   methods: {
@@ -138,6 +139,12 @@ export default {
       }else if(value==="待查看审批"){
         return {'show': true, 'type':'查看'}
       }
+      if(value==="已处理审批") {
+        //对于已处理审批而言，用户点开消息则默认其已阅
+        if(!row.item.checked) {
+          readNotification(row.item.notificationId)
+        }
+      }
       return {'show':false}
     },
     download(row){
@@ -171,6 +178,10 @@ export default {
     },
     downloadFile(row) {
       window.location.href = row.item.body
+      console.log(row)
+      if(!row.item.checked) {
+        readNotification(row.item.notificationId)
+      }
     },
     execOption(row) {
       let value = row.item.type  //根据type的不同执行不同的操作
@@ -202,6 +213,10 @@ export default {
         }).catch(err => {
           console.log(err)
         })
+        //设置消息已阅
+        if(!row.item.checked) {
+          readNotification(this.notificationId)
+        }
         this.$refs['applicationModal'].show()
       }
     },
@@ -233,10 +248,30 @@ export default {
         alert("处理失败")
         console.log(err)
       })
-    }
+    },
+    //定时器
+    timer() {
+      // 计时器正在进行中，退出函数
+      if (this.intervalId != null) {
+        return
+      }
+      // 计时器为空，操作
+      this.intervalId = setInterval(() => {
+        this.getAllNotificaions()
+      }, 1000)
+    },
+    // 停止定时器
+    clearTimer() {
+      clearInterval(this.intervalId); //清除计时器
+      this.intervalId = null //设置为null
+    },
   },
-  mounted() {
-    this.getAllNotificaions()
+  // 创建定时器，定时获取消息
+  created() {
+    this.timer()
+  },
+  destroyed() {
+    this.clearTimer()
   }
 }
 </script>

@@ -26,3 +26,10 @@ export function readNotification(notificationId) {
     data: formData
   })
 }
+
+export function getUncheckedCount() {
+  return request({
+    url: "/notification/uncheckedCount",
+    method: "get"
+  })
+}
