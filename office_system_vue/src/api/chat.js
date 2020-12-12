@@ -9,16 +9,16 @@ export function joinChat() {
 }
 
 export function getSocketMessageByDate(date,launchId,receiveId,companyId,deptId) {
+  let formData = new FormData();
+  formData.append('date',date);
+  formData.append('launchId',launchId);
+  formData.append('receiveId',receiveId);
+  formData.append('companyId',companyId);
+  formData.append('deptId',deptId);
   return request({
     url: "/chatRoom/group/message",
     method: "post",
-    data: {
-      'date': date,
-      'launchId': launchId,
-      'receiveId': receiveId,
-      'companyId': companyId,
-      'deptId': deptId
-    }
+    data: formData,
   })
 }
 

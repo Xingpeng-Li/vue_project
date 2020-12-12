@@ -10,7 +10,7 @@
           <b-nav-item style="margin-right: 10px" to="/cloudfile" :active="$route.name === 'CloudFile'">云空间</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/message" :active="$route.name === 'Message'">消息</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/announcement" :active="$route.name === 'Announcement'">公告栏</b-nav-item>
-          <b-nav-item style="margin-right: 10px">聊天</b-nav-item>
+          <b-nav-item style="margin-right: 10px" to="/chat">聊天</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/publicAccount" :active="$route.name === 'PublicAccount'">公众号</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/loginToMail" :active="$route.name === 'LoginToMail'">邮箱</b-nav-item>
         </b-navbar-nav>
