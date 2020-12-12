@@ -1,17 +1,17 @@
 import request from "../util/request"
 
-export function sendApplication(type,startTime,endTime,reason,approverPhoneNumber,secondApproverPhoneNumber) {
+export function sendApplication(type,startTime,endTime,reason,approverId,secondApproverId) {
+  let formData = new FormData()
+  formData.append('type',type)
+  formData.append('startTime',startTime)
+  formData.append('endTime',endTime)
+  formData.append('reason',reason)
+  formData.append('approverId',approverId)
+  formData.append('secondApproverId',secondApproverId)
   return request({
     url: "/application/send",
     method: "post",
-    data: {
-      'type': type,
-      'startTime': startTime,
-      'endTime': endTime,
-      'reason': reason,
-      'approverPhoneNumber': approverPhoneNumber,
-      'secondApproverPhoneNumber':secondApproverPhoneNumber
-    }
+    data: formData
   })
 }
 

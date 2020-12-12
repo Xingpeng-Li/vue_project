@@ -5,7 +5,7 @@ switch (process.env.NODE_ENV) {
     baseUrl = "http://localhost:9000/"  //开发环境url
     break
   case 'production':
-    baseUrl = "http://192.168.196.146:9000/"   //生产环境url
+    baseUrl = "http://118.31.166.90:9000/"   //生产环境url
     break
 }
 export default baseUrl;

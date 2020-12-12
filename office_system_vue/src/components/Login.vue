@@ -95,7 +95,6 @@ export default {
     loginByPassword() {
       let password = this.md5(this.password)
       loginByPassword(this.phoneNumber,password).then(res => {
-        console.log(res)
         if(res.data.status === 'success') {
           this.$router.push('/home')
         }
