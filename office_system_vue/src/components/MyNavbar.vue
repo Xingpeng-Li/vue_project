@@ -25,9 +25,9 @@
             <b-dropdown-item to="/approval" :active="$route.name === 'Approval'">请假审批</b-dropdown-item>
             <b-dropdown-item to="/report" :active="$route.name === 'Report'">工作报告</b-dropdown-item>
             <b-dropdown-item to="/healthPunchin" :active="$route.name === 'HealthPunchin'">健康打卡</b-dropdown-item>
-            <b-dropdown-item>考勤打卡</b-dropdown-item>
+            <b-dropdown-item @click="punchin">考勤打卡</b-dropdown-item>
             <b-dropdown-item to="/writeAnnouncement" :active="$route.name === 'WriteAnnouncement'" v-if="haveAuthority">发布公告</b-dropdown-item>
-            <b-dropdown-item v-if="haveAuthority">打卡提醒</b-dropdown-item>
+            <b-dropdown-item @click="sendHealthPunchinNotification" v-if="haveAuthority">打卡提醒</b-dropdown-item>
             <b-dropdown-item to="/statistic" :active="$route.name === 'AttendanceStatistics'" v-if="haveAuthority">打卡记录</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
@@ -160,6 +160,8 @@ import {
   updateBacklog
 } from "../api/backlog";
 import {haveAuthority} from "../api/company";
+import {punchin} from "../api/punchin";
+import {sendHealthPunchinNotification} from "../api/healthPunchin";
 
 export default {
   name: "Header",
@@ -335,6 +337,34 @@ export default {
         }
       }).catch(err => {
         console.log(err)
+      })
+    },
+    punchin(){
+      punchin().then(res=>{
+        if(res.data.status === 'success') {
+          alert("考勤打卡成功")
+        }
+        else
+          {
+            alert("考勤打卡失败")
+          }
+      }).catch(err => {
+        alert(err)
+        //console.log(err)
+      })
+    },
+    sendHealthPunchinNotification(){
+      sendHealthPunchinNotification().then(res=>{
+        if(res.data.status === 'success') {
+          alert("健康打卡提醒发送成功")
+        }
+        else
+        {
+          alert("健康打卡提醒发送失败")
+        }
+      }).catch(err => {
+        alert(err)
+        //console.log(err)
       })
     }
   },

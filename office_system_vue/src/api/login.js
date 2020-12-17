@@ -5,7 +5,7 @@ export function login(phoneNumber,verificationCode) {
   return request({
     url: "/loginByPhone",
     method: "post",
-    data:{
+    params:{
       'phoneNumber': phoneNumber,
       'verificationCode': verificationCode
     }
