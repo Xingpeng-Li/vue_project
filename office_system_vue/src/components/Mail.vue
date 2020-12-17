@@ -188,7 +188,9 @@ export default {
         }
       })
     },
+    async
     getAllMailContent(){
+     await
       getAllMailContent().then(res=>{
         console.log(res)
         let jsonObj = JSON.parse(JSON.stringify(res.data.data));

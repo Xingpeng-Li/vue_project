@@ -18,6 +18,7 @@ import WriteAnnouncement from "../components/WriteAnnouncement";
 import LoginToMail from "../components/LoginToMail";
 import PublicAccount from "../components/PublicAccount";
 import AccountDetail from "../components/AccountDetail";
+import ChatRoom from "../components/ChatRoom";
 
 Vue.use(Router)
 
@@ -40,6 +41,7 @@ export default new Router({
     { path: '/loginToMail',name:'LoginToMail',component:LoginToMail,meta:{showNav: true}},
     { path: '/publicAccount',name:'PublicAccount',component:PublicAccount,meta:{showNav: true}},
     { path: '/accountDetail',name:'AccountDetail',component:AccountDetail,meta:{showNav: true}},
+    {path: '/chat',name:'ChatRoom',component:ChatRoom,meta:{showNav: true}},
   ],
   mode: "history"
 })
