@@ -47,7 +47,7 @@
                   <div>
                     <br>
                     <br>
-                    <b-card border-variant="light">
+                    <b-card border-variant="light" v-show="haveAuthority">
                       <b-input-group>
                         <b-form-file
                           v-model="file"
@@ -58,14 +58,14 @@
                         <b-button variant="outline-primary" @click="importUser()">导入</b-button>
                       </b-input-group>
                     </b-card>
-                    <b-button variant="outline-dark" size="sm" href="https://officesystem-1304131169.cos.ap-nanjing.myqcloud.com/officesystemCloudFile/User.xlsx">
+                    <b-button variant="outline-dark" size="sm" v-show="haveAuthority" href="https://officesystem-1304131169.cos.ap-nanjing.myqcloud.com/officesystemCloudFile/User.xlsx">
                       下载模板
                     </b-button>
                   </div>
                 </div>
               </b-card-body>
             </b-tab>
-            <b-tab title="添加部门" active @click="getNoDeptContact">
+            <b-tab title="添加部门" v-if="haveAuthority" active @click="getNoDeptContact">
               <b-card-body>
                 <div>
                   <!--输入部门名模块 -->
@@ -155,7 +155,7 @@
 <script>
 import{importToDB} from "../api/importUser";
 import{getNoDeptContacts,getDeptContact,getCompanyContact} from "../api/user";
-import{addDeptToDB} from "../api/company";
+import{addDeptToDB,haveAuthority} from "../api/company";
 import {uploadFile} from "../api/cloudFile";
 //import{}
 
@@ -200,8 +200,11 @@ export default {
       //选中的管理员信息
       selectedDeptMaster:[],
       //选中的部门成员信息
-      selectedDeptMember:[]
+      selectedDeptMember:[],
 
+
+      //是否为管理员
+      haveAuthority:false,
     }
 
   },
@@ -229,8 +232,9 @@ export default {
         alert("联系人信息获取失败!")
         console.log(err)
       })
-    },
 
+
+    },
     //获取自由联系人数据
     getNoDeptContact() {
       let _this = this
@@ -280,7 +284,6 @@ export default {
     },
 
     //以excel形式导入用户信息
-
     importUser() {
       //上传文件
       importToDB(this.file).then(res => {
@@ -336,9 +339,19 @@ export default {
 
   },
   mounted() {
-    // this.getNoDeptContacts()
-    // this.getDeptContact()
-    this.getCompanyContact()
+    this.getNoDeptContact()
+    this.getDeptContacts()
+    this.getCompanyContacts()
+
+
+    let _this = this
+    //是否为管理员
+    haveAuthority().then(res=>{
+      let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+      //console.log(jsonObj)
+      _this.haveAuthority = jsonObj==="admin";
+      //console.log(_this.haveAuthority)
+    })
 
   }
 }
