@@ -15,7 +15,7 @@
           <b-nav-item style="margin-right: 10px" to="/chat" :active="$route.name === 'ChatRoom'">聊天</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/publicAccount" :active="$route.name === 'PublicAccount'">公众号</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/loginToMail" :active="$route.name === 'LoginToMail'">邮箱</b-nav-item>
-          <b-nav-item style="margin-right: 10px" v-b-toggle.backlog>待办</b-nav-item>
+          <b-nav-item style="margin-right: 10px" v-b-toggle.backlog @click="getBacklog">待办</b-nav-item>
         </b-navbar-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
@@ -49,7 +49,7 @@
         <div class="m-3 d-flex justify-content-between">
           <h5>
             <b>我的待办</b>
-            <b-button variant="link" size="sm" v-b-modal.backlog><b-icon icon="plus-circle"></b-icon></b-button>
+            <b-button variant="link" size="sm" @click="create"><b-icon icon="plus-circle"></b-icon></b-button>
           </h5>
           <b-icon icon="x" scale="2" @click="hide"></b-icon>
         </div>
@@ -57,15 +57,15 @@
           <b-tab title="未完成" active>
             <b-list-group v-for="unfinished in unfinished_list" :key="unfinished.body">
               <b-list-group-item class="d-flex justify-content-between align-items-center">
-                <p class="mb-1">{{ unfinished.body }}<br><small>{{ unfinished.time }}</small></p>
+                <p class="mb-1">{{ unfinished.title }}<br><small>{{ unfinished.endTime | DateFormat }}</small></p>
                 <b-dropdown variant="link" right size="sm" no-caret>
                   <template #button-content>
                     <b-icon icon="caret-down"></b-icon>
                   </template>
-                  <b-dropdown-item><b-icon icon="check2"></b-icon> 完成</b-dropdown-item>
-                  <b-dropdown-item><b-icon icon="pencil-square"></b-icon> 编辑</b-dropdown-item>
+                  <b-dropdown-item @click="finishBacklog(unfinished.backlogId)"><b-icon icon="check2"></b-icon> 完成</b-dropdown-item>
+                  <b-dropdown-item @click="update(unfinished)"><b-icon icon="pencil-square"></b-icon> 编辑</b-dropdown-item>
                   <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item><b-icon icon="exclamation-circle" variant="danger"></b-icon> 删除</b-dropdown-item>
+                  <b-dropdown-item @click="deleteBacklog(unfinished.backlogId,false)"><b-icon icon="exclamation-circle" variant="danger"></b-icon> 删除</b-dropdown-item>
                 </b-dropdown>
               </b-list-group-item>
             </b-list-group>
@@ -73,15 +73,12 @@
           <b-tab title="已完成">
             <b-list-group v-for="finished in finished_list" :key="finished.body">
               <b-list-group-item class="d-flex justify-content-between align-items-center">
-                <p class="mb-1">{{ finished.body }}<br><small>{{ finished.time }}</small></p>
+                <p class="mb-1">{{ finished.title }}<br><small>{{ finished.endTime | DateFormat }}</small></p>
                 <b-dropdown variant="link" right size="sm" no-caret>
                   <template #button-content>
                     <b-icon icon="caret-down"></b-icon>
                   </template>
-                  <b-dropdown-item><b-icon icon="check2"></b-icon> 完成</b-dropdown-item>
-                  <b-dropdown-item><b-icon icon="pencil-square"></b-icon> 编辑</b-dropdown-item>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item><b-icon icon="exclamation-circle" variant="danger"></b-icon> 删除</b-dropdown-item>
+                  <b-dropdown-item @click="deleteBacklog(finished.backlogId,true)"><b-icon icon="exclamation-circle" variant="danger"></b-icon> 删除</b-dropdown-item>
                 </b-dropdown>
               </b-list-group-item>
             </b-list-group>
@@ -89,12 +86,18 @@
         </b-tabs>
       </template>
     </b-sidebar>
-    <b-modal id="backlog">
+    <b-modal ref="create_backlog">
       <b-form-textarea
-        placeholder="待办内容"
+        placeholder="标题"
         rows="3"
         no-resize
-        v-model="backlog_body"
+        v-model="backlog_title"
+      ></b-form-textarea>
+      <b-form-textarea
+        placeholder="描述"
+        rows="3"
+        no-resize
+        v-model="backlog_description"
       ></b-form-textarea>
       <br>
       <h5>
@@ -108,31 +111,69 @@
           <b-form-timepicker v-model="backlog_endTime" locale="cn"></b-form-timepicker>
         </b-card>
       </b-collapse>
+      <template #modal-footer="{send}">
+        <b-button size="mm" variant="primary" @click="createBacklog">
+          确定
+        </b-button>
+      </template>
+    </b-modal>
+
+    <b-modal ref="update_backlog">
+      <b-form-textarea
+        placeholder="标题"
+        rows="3"
+        no-resize
+        v-model="backlog_title"
+      ></b-form-textarea>
+      <b-form-textarea
+        placeholder="描述"
+        rows="3"
+        no-resize
+        v-model="backlog_description"
+      ></b-form-textarea>
+      <br>
+      <h5>
+        <b-icon icon="alarm" v-b-toggle.selectTime></b-icon>
+        {{backlog_endDate}} {{backlog_endTime}}
+      </h5>
+      <b-collapse id="selectTime" class="mt-2">
+        <b-card>
+          <p class="card-text">选择时间</p>
+          <b-form-datepicker v-model="backlog_endDate" locale="cn"></b-form-datepicker>
+          <b-form-timepicker v-model="backlog_endTime" locale="cn"></b-form-timepicker>
+        </b-card>
+      </b-collapse>
+      <template #modal-footer="{send}">
+        <b-button size="mm" variant="primary" @click="updateBacklog">
+          确定
+        </b-button>
+      </template>
     </b-modal>
   </div>
 </template>
 
 <script>
 import {getUncheckedCount} from "../api/notification";
+import {
+  createBacklog,
+  deleteBacklog,
+  finishBacklog,
+  getFinishedBackLogs,
+  getNotFinishedBackLogs,
+  updateBacklog
+} from "../api/backlog";
 
 export default {
   name: "Header",
   data() {
     return {
-      backlog_body: '',
+      backlog_title: '',
+      backlog_description: '',
       backlog_endDate: '2020-1-3',
       backlog_endTime: '13:20:00',
       unfinished_list: [
-        {body: '商务智能大作业', time: '2020/12/8 12:00'},
-        {body: '系统级程序设计考试', time: '2020/12/21 18:00'},
-        {body: '数字图像处理考试', time: '2020/12/28 18:30'},
-        {body: '数字图像处理大作业', time: '2021/1/6 12:30'}
       ],
       finished_list: [
-        {body: '商务智能作业', time: '2020/11/18 12:00'},
-        {body: '系统级程序设计作业', time: '2020/11/20 18:00'},
-        {body: 'Linux考试', time: '2020/11/23 18:30'},
-        {body: 'Linux作业', time: '2020/11/28 12:30'}
       ],
       uncheckedCount: null,
       intervalId: null
@@ -141,6 +182,105 @@ export default {
   methods: {
     showRouter() {
       console.log(this.$route)
+    },
+    getBacklog() {
+      this.getFinishedList()
+      this.getUnfinishedList()
+    },
+    //获取未完成待办
+    getUnfinishedList() {
+      let _this = this
+      getNotFinishedBackLogs().then(res => {
+        if(res.data.status === 'success') {
+          console.log(res.data.data)
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          _this.unfinished_list = jsonObj
+          console.log(_this.unfinished_list)
+        }
+        else {
+          alert("待办获取失败，"+res.data.data.errMsg)
+          if(res.data.data.errCode === 1||res.data.data.errCode === 20012) {
+          //跳回登陆界面
+          this.$router.push("/")
+        }
+      }
+      }).catch(err => {
+        alert("待办获取失败!")
+        console.log(err)
+      })
+    },
+    //获取已完成待办
+    getFinishedList() {
+      let _this = this
+      getFinishedBackLogs().then(res => {
+        if(res.data.status === 'success') {
+          let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+          _this.finished_list = jsonObj
+        }
+        else {
+          alert("待办获取失败，"+res.data.data.errMsg)
+          if(res.data.data.errCode === 1||res.data.data.errCode === 20012) {
+            //跳回登陆界面
+            this.$router.push("/")
+          }
+        }
+      }).catch(err => {
+        alert("待办获取失败!")
+        console.log(err)
+      })
+    },
+    refresh() {
+      this.backlog_title=''
+      this.backlog_description=''
+      let date = new Date()
+      let year = date.getFullYear()
+      let month = date.getMonth()+1
+      let day = date.getDate()
+      let hour = date.getHours()
+      let minute = date.getMinutes()
+      this.backlog_endDate = ""+year+"-"+month+"-"+day
+      this.backlog_endTime = ""+hour+":"+minute
+    },
+    create() {
+      this.refresh()
+      this.$refs['create_backlog'].show()
+    },
+    createBacklog() {
+      let endTime = this.backlog_endDate + " " + this.backlog_endTime
+      createBacklog(this.backlog_title, this.backlog_description, endTime).then(res => {
+        if(res.data.status === 'success') {
+          alert("添加成功")
+          this.getUnfinishedList()
+          this.$refs['create_backlog'].hide();
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    update(unfinished) {
+      this.backlog_title = unfinished.title
+      this.backlog_description = unfinished.description
+      let date = new Date(unfinished.endTime)
+      let year = date.getFullYear()
+      let month = date.getMonth()+1
+      let day = date.getDate()
+      let hour = date.getHours()
+      let minute = date.getMinutes()
+      this.backlog_endDate = ""+year+"-"+month+"-"+day
+      this.backlog_endTime = ""+hour+":"+minute
+      this.$refs['update_backlog'].show()
+    },
+    updateBacklog() {
+      let endTime = this.backlog_endDate + " " + this.backlog_endTime
+      updateBacklog(this.backlog_title, this.backlog_description, endTime).then(res => {
+        if(res.data.status === 'success') {
+          alert("编辑成功")
+          this.getUnfinishedList()
+          this.$refs['update_backlog'].hide();
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     getUncheckedCount() {
       //用户尚未登录，退出函数
@@ -154,6 +294,41 @@ export default {
         }
         else {
           alert("消息获取失败！")
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    //完成
+    finishBacklog(backlogId) {
+      finishBacklog(backlogId).then(res => {
+        if(res.data.status === 'success') {
+          this.getUncheckedCount()
+          this.getUnfinishedList()
+          this.getFinishedList()
+        }
+        else {
+          alert("设置失败")
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    //删除
+    deleteBacklog(backlogId,isFinish) {
+      deleteBacklog(backlogId).then(res => {
+        if(res.data.status === 'success') {
+          alert("删除成功")
+          this.getUncheckedCount()
+          if(isFinish) {
+            this.getFinishedList()
+          }
+        else {
+            this.getUnfinishedList()
+          }
+        }
+        else {
+          alert("删除失败")
         }
       }).catch(err => {
         console.log(err)
@@ -177,10 +352,10 @@ export default {
     },
   },
   created() {
-    this.timer()
+    //this.timer()
   },
   destroyed() {
-    this.clearTimer()
+    //this.clearTimer()
   }
 }
 </script>
