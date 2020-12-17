@@ -43,7 +43,7 @@
     <div>
       <br>
       <b-button variant="primary" @click="health">确定</b-button>
-      <b-button variant="primary" to="/statistic">健康打卡统计</b-button>
+      <b-button variant="primary" to="/statistic" v-if="haveAuthority">健康打卡统计</b-button>
     </div>
   </div>
 </template>
@@ -51,6 +51,7 @@
 <script>
 import VDistpicker from 'v-distpicker'
 import {health} from "../api/healthPunchin";
+import {haveAuthority} from "../api/company";
 
 // Vue.component('v-distpicker', VDistpicker);
 
@@ -68,7 +69,10 @@ export default {
       'userprovince':'',
       'usercity':'',
       userarea:'',
-      'PunchinNote':''
+      'PunchinNote':'',
+
+      //是否为管理员
+      haveAuthority:false,
     }
   },
   methods: {
@@ -100,6 +104,14 @@ export default {
     }
   },
   mounted() {
+    let _this = this
+    //是否为管理员
+    haveAuthority().then(res=>{
+      let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+      //console.log(jsonObj)
+      _this.haveAuthority = jsonObj==="admin";
+      //console.log(_this.haveAuthority)
+    })
   }
 }
 </script>

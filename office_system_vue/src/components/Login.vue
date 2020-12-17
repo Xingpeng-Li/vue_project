@@ -76,11 +76,62 @@
       </b-tabs>
       <router-link to="/register">没有账号？去注册</router-link>
     </b-card>
+
+
+    <!--要求用户填写企业邀请码-->
+    <b-modal ref="modal-1" title="检测到您尚未加入企业，请填写企业邀请码或者创建企业，否则将无法使用我们的产品" hide-footer>
+      <b-card>
+        <b-tabs pills card vertical>
+          <b-tab title="加入企业" active>
+            <b-input-group class="mt-3" >
+              <template v-slot:prepend>
+                <b-input-group-text style="width: 90px">
+                  <span style="margin: auto">邀请码</span>
+                </b-input-group-text>
+              </template>
+              <b-form-input
+                v-model="companyInvitingCode"
+                aria-describedby="input-live-help input-live-feedback"
+                placeholder="请输入企业邀请码"
+                trim
+              ></b-form-input>
+            </b-input-group>
+            <br>
+            <b-button variant="outline-primary" style="margin-left: 100px" @click="joinCompany">
+              确认
+            </b-button>
+          </b-tab>
+          <b-tab title="创建企业">
+            <b-input-group class="mt-3" >
+              <template v-slot:prepend>
+                <b-input-group-text style="width: 90px">
+                  <span style="margin: auto">企业名</span>
+                </b-input-group-text>
+              </template>
+              <b-form-input
+                v-model="companyName"
+                aria-describedby="input-live-help input-live-feedback"
+                placeholder="请输入您的企业名"
+                trim
+              ></b-form-input>
+            </b-input-group>
+            <br>
+            <b-button variant="outline-primary" style="margin-left: 100px" @click="createCompany">
+              确认
+            </b-button>
+          </b-tab>
+        </b-tabs>
+      </b-card>
+    </b-modal>
+
+
   </div>
 </template>
 
 <script>
 import {loginByPassword} from "../api/login";
+import {getMyPersonalInfo} from "../api/user";
+import {addCompany, joinCompany as join_company} from "../api/company";
 
 export default {
   name: "Login",
@@ -88,19 +139,58 @@ export default {
     return {
       'phoneNumber': '',
       'password':'',
-      'verificationCode':''
+      'verificationCode':'',
+
+      companyInvitingCode:"",
+      companyName:"",
     }
   },
   methods: {
     loginByPassword() {
+      console.log(this)
       let password = this.md5(this.password)
       loginByPassword(this.phoneNumber,password).then(res => {
         if(res.data.status === 'success') {
-          this.$router.push('/home')
+          getMyPersonalInfo().then(res =>  {
+            let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+            //console.log(jsonObj)
+            //console.log(jsonObj.companyName==="无公司")
+            if(jsonObj.companyName==="无公司"){
+              this.$refs['modal-1'].show()
+            }
+            else{
+              this.$router.push('/home')
+            }
+          })
         }
         else {
           console.log(res.data)
           alert('登录失败，'+res.data.data.errMsg)
+        }
+      })
+    },
+    joinCompany(){
+      let _this = this
+      //console.log(this.companyInvitingCode)
+      join_company(this.companyInvitingCode).then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data));
+        if(jsonObj.status==="success"){
+          this.$router.push('/home');
+          alert("成功加入企业");
+        }else{
+          alert(jsonObj.data.errMsg);
+        }
+      })
+    },
+    createCompany(){
+      let _this = this
+      addCompany(this.companyName).then(res=>{
+        let jsonObj = JSON.parse(JSON.stringify(res.data));
+        if(jsonObj.status==="success"){
+          this.$router.push('/home');
+          alert("成功创建企业");
+        }else{
+          alert(jsonObj.data.errMsg);
         }
       })
     }

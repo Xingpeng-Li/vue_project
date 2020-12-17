@@ -6,13 +6,11 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item style="margin-right: 10px" to="/addressBook" :active="$route.name === 'AddressBook'">通讯录</b-nav-item>
-          <b-nav-item style="margin-right: 10px">会议</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/cloudfile" :active="$route.name === 'CloudFile'">云空间</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/message" :active="$route.name === 'Message'">
             消息 <b-badge variant="danger" v-show="uncheckedCount!==0">{{ uncheckedCount }}</b-badge>
           </b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/announcement" :active="$route.name === 'Announcement'">公告栏</b-nav-item>
-          <b-nav-item style="margin-right: 10px" to="/chat" :active="$route.name === 'ChatRoom'">聊天</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/publicAccount" :active="$route.name === 'PublicAccount'">公众号</b-nav-item>
           <b-nav-item style="margin-right: 10px" to="/loginToMail" :active="$route.name === 'LoginToMail'">邮箱</b-nav-item>
           <b-nav-item style="margin-right: 10px" v-b-toggle.backlog @click="getBacklog">待办</b-nav-item>
@@ -28,10 +26,9 @@
             <b-dropdown-item to="/report" :active="$route.name === 'Report'">工作报告</b-dropdown-item>
             <b-dropdown-item to="/healthPunchin" :active="$route.name === 'HealthPunchin'">健康打卡</b-dropdown-item>
             <b-dropdown-item>考勤打卡</b-dropdown-item>
-            <b-dropdown-item to="/writeAnnouncement" :active="$route.name === 'WriteAnnouncement'">发布公告</b-dropdown-item>
-            <b-dropdown-item>语音识别</b-dropdown-item>
-            <b-dropdown-item>打卡提醒</b-dropdown-item>
-            <b-dropdown-item to="/statistic" :active="$route.name === 'AttendanceStatistics'">打卡记录</b-dropdown-item>
+            <b-dropdown-item to="/writeAnnouncement" :active="$route.name === 'WriteAnnouncement'" v-if="haveAuthority">发布公告</b-dropdown-item>
+            <b-dropdown-item v-if="haveAuthority">打卡提醒</b-dropdown-item>
+            <b-dropdown-item to="/statistic" :active="$route.name === 'AttendanceStatistics'" v-if="haveAuthority">打卡记录</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
@@ -162,6 +159,7 @@ import {
   getNotFinishedBackLogs,
   updateBacklog
 } from "../api/backlog";
+import {haveAuthority} from "../api/company";
 
 export default {
   name: "Header",
@@ -176,7 +174,9 @@ export default {
       finished_list: [
       ],
       uncheckedCount: null,
-      intervalId: null
+      intervalId: null,
+      //是否为管理员
+      haveAuthority:false
     }
   },
   methods: {
@@ -333,29 +333,17 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-    },
-    //定时器
-    timer() {
-      // 计时器正在进行中，退出函数
-      if (this.intervalId != null) {
-        return
-      }
-      // 计时器为空，操作
-      this.intervalId = setInterval(() => {
-        this.getUncheckedCount()
-      }, 1000)
-    },
-    // 停止定时器
-    clearTimer() {
-      clearInterval(this.intervalId); //清除计时器
-      this.intervalId = null //设置为null
-    },
+    }
   },
-  created() {
-    //this.timer()
-  },
-  destroyed() {
-    //this.clearTimer()
+  mounted() {
+    let _this = this
+    //是否为管理员
+    haveAuthority().then(res=>{
+      let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+      //console.log(jsonObj)
+      _this.haveAuthority = jsonObj==="admin";
+      //console.log(_this.haveAuthority)
+    })
   }
 }
 </script>

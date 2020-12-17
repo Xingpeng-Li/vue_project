@@ -8,23 +8,23 @@ export function haveAuthority() {
   })
 }
 
-export function addCompany(companyname) {
+export function addCompany(companyName) {
+  let formData = new FormData()
+  formData.append("companyName", companyName)
   return request({
     url: "/company/add",
     method: "post",
-    data: {
-      'companyname': companyname
-    }
+    data: formData
   })
 }
 
-export function joinCompany(companycode) {
+export function joinCompany(companyCode) {
+  let formData = new FormData()
+  formData.append("companyCode", companyCode)
   return request({
     url: "/company/join",
     method: "post",
-    data: {
-      'companycode': companycode
-    }
+    data: formData
   })
 }
 

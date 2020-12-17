@@ -153,6 +153,7 @@
 
 import {myPublicAccounts,companyPublicAccounts,allSubscribePublicAccounts,createPersonalAccount,
   createCompanyAccount,search} from "../api/publicAccount";
+import {haveAuthority} from "../api/company";
 
 export default {
   data() {
@@ -190,6 +191,9 @@ export default {
       keyword:"",//搜索公众号使用的关键字
       searchAccounts:[//搜索到的公众号
       ],
+
+      //是否为管理员
+      haveAuthority:false,
     }
   },
   methods: {
@@ -221,9 +225,25 @@ export default {
     createAccount(){
       console.log(this.selectedKind)
       if(this.selectedKind===1){
-        createPersonalAccount(this.name,this.info)
-      }else if(this.selectedKind===2){
-        createCompanyAccount(this.name,this.info)
+        createPersonalAccount(this.name,this.info).then(res=>{
+          let jsonObj = JSON.parse(JSON.stringify(res.data.status));
+          if(jsonObj==="success"){
+            alert("创建成功")
+          }else{
+            alert("创建失败")
+          }
+        })
+      }else if(this.selectedKind===2 && this.haveAuthority===true){
+        createCompanyAccount(this.name,this.info).then(res=>{
+          let jsonObj = JSON.parse(JSON.stringify(res.data.status));
+          if(jsonObj==="success"){
+            alert("创建成功")
+          }else{
+            alert("创建失败")
+          }
+        })
+      }else if(this.selectedKind===2 && this.haveAuthority===false){
+        alert("对不起，您不是公司管理员，没有权限创建企业公众号")
       }
     },
     toDetailAccount(row){//跳转到详情界面
@@ -246,6 +266,15 @@ export default {
   },
   mounted(){
     this.loadAllAccounts()
+
+    let _this = this
+    //是否为管理员
+    haveAuthority().then(res=>{
+      let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+      //console.log(jsonObj)
+      _this.haveAuthority = jsonObj==="admin";
+      //console.log(_this.haveAuthority)
+    })
   }
 }
 </script>
