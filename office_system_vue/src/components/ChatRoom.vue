@@ -121,7 +121,7 @@ export default {
       wsControllerM: null,
       handelMessageFn: null,
       messageBoxContent: null,
-      wsAddress:"wss://localhost:9000",
+      wsAddress:"ws://localhost:9000",
       requestAddress: "http://localhost:9000",
       fileTypeObj: {
         zip: {
@@ -462,8 +462,8 @@ export default {
         (function (i) {
           const item = document.createElement("div");
           item.className = "user-list-header user-list-item";
-          item.onclick = _this.switchChatRoom();
           item.setAttribute("uData", JSON.stringify(socketUserListSpare[i]));
+          item.onclick = _this.switchChatRoom(item);
           const text = document.createElement("div");
           text.className = "user-list-header-txt";
           const nickname = document.createElement("p");
@@ -482,8 +482,8 @@ export default {
           item.appendChild(statusTag);
           // 聊天选中
           if (_this.roomUser !== null && ~~socketUserListSpare[i].userId === ~~_this.roomUser.userId && !bb) {
-            document.getElementsByClassName("active-u-l")[0].classList.remove("active-u-l");
-            item.classList.add("active-u-l");
+            // document.getElementsByClassName("user-list-header user-list-item active-u-l")[0].classList.remove("active-u-l");
+            // item.classList.add("active-u-l");
             if (!b) _this.setInitRoom();
             bb = true;
             _this.roomUser = socketUserListSpare[i];
@@ -503,13 +503,17 @@ export default {
     },
     // 处理部门联系人用户列表
     loadRelevantUser(b){
-      getSocketUserRelevant(b).then(res=>{
+      console.log(this)
+      let id = this.userData.userId;
+      let _this=this;
+      getSocketUserRelevant(id).then(res=>{
         if(res.data.status === 'success'){
           let e = JSON.parse(JSON.stringify(res.data.data));
-          this.relevantUserList = e.data;
-          document.getElementById("user-list-title-count-g").innerText = (this.relevantUserList.length + 1).toString();
-          if (this.relevantUserList.length > 0) {
-            this.loadSocketUser(0, b)
+          //console.log(e)
+          _this.relevantUserList = e;
+          document.getElementById("user-list-title-count-g").innerText = (_this.relevantUserList.length + 1).toString();
+          if (_this.relevantUserList.length > 0) {
+            _this.loadSocketUser(0, b)
           } else {
             //无部门联系人
             document.getElementsByClassName("user-list-items-relevant")[0].innerHTML = "<p class='data-empty'>无部门联系人</p>"
@@ -522,7 +526,7 @@ export default {
       })
     },
     //点击发送信息
-    sendMessage(){
+    sendMessage() {
       if (!this.initSuccess) return;
       const contentDom = document.getElementsByClassName("message-box-system-message-c")[0];
       const val = contentDom.value;
@@ -557,7 +561,7 @@ export default {
      * n=0发送图片
      * n=1发送文件
      */
-    sendFile(e, n){
+    sendFile(e, n) {
       if (!this.initSuccess) return alert("请在初始化成功后再发送");
       if (this.uploadIng) return alert("当前队列正在上传文件，请稍后再发送");
       const file = e.files[0];
@@ -625,7 +629,11 @@ export default {
       const loadNode = that;
       that.parentNode.removeChild(that);
       const params = {
-        date: new Date(this.loadTime)
+        date: new Date(this.loadTime),
+        launchId: null,
+        receiveId: null,
+        companyId: null,
+        deptId: null
       };
       params.date=params.date.getFullYear() + '-' + (params.date.getMonth() + 1) + '-' + params.date.getDate() + ' '
         + params.date.getHours() + ':' + params.date.getMinutes() + ':' + params.date.getSeconds();
@@ -637,13 +645,10 @@ export default {
         params.deptId = this.deptId;
       }
       let _this=this;
-      //let jason=JSON.parse(JSON.stringify(params));
       getSocketMessageByDate(params.date,params.launchId,params.receiveId,params.companyId,params.deptId).then(res=>{
         if(res.data.status === 'success'){
           var e = JSON.parse(JSON.stringify(res.data.data));
           const messigeList = e;
-          // console.log(e);
-          // console.log(messigeList);
           if (messigeList.length > 0) {
             const domBox = document.createDocumentFragment();
             domBox.appendChild(loadNode);
@@ -756,15 +761,15 @@ export default {
     /**
 
     */
-    switchChatRoom() {
-      console.log(this);
-      const uData = JSON.parse(this.getAttribute("uData"));
+    switchChatRoom(item) {
+      const uData = JSON.parse(item.getAttribute("uData"));
+
       if (uData.userId === this.userData.userId) return;
       this.roomUser = uData;
-      const x = document.getElementsByClassName("active-u-l")[0];
-      console.log(x);
-      document.getElementsByClassName("active-u-l")[0].classList.remove("active-u-l");
-      this.classList.add("active-u-l");
+      // const x = document.getElementsByClassName("active-u-l")[0];
+      // console.log(x);
+      // document.getElementsByClassName("active-u-l")[0].classList.remove("active-u-l");
+      // item.classList.add("active-u-l");
       document.getElementsByClassName("message-box-title")[0].innerText = this.roomUser.userName;
       this.setInitRoom();
       this.hiddenUserListPopup();
@@ -778,6 +783,7 @@ export default {
       this.hiddenUserListPopup();
     },
     setInitRoom() {
+      let _this=this;
       const loadDom = document.createElement("div");
       loadDom.innerText = "加载更多";
       loadDom.className = "load-message";
@@ -790,10 +796,10 @@ export default {
 
       this.messageBoxContent.innerHTML = "";
       setTimeout(function () {
-        this.messageBoxContent.appendChild(loadDom);
-        this.loadTime = new Date().getTime();
-        this.preTime = new Date().getTime();
-        this.loadMessage(document.getElementsByClassName("load-message")[0], true)
+        _this.messageBoxContent.appendChild(loadDom);
+        _this.loadTime = new Date().getTime();
+        _this.preTime = new Date().getTime();
+        _this.loadMessage(document.getElementsByClassName("load-message")[0], true)
       }, 200)
     },
     timeChange(time) {
@@ -822,10 +828,10 @@ export default {
       }
     },
     showUserListPopup() {
-      document.getElementsByClassName("web03")[0].classList.add("mobile")
+      //document.getElementsByClassName("web03")[0].classList.add("mobile")
     },
     hiddenUserListPopup() {
-      document.getElementsByClassName("web03")[0].classList.remove("mobile")
+      //document.getElementsByClassName("web03")[0].classList.remove("mobile")
     },
     switchUserListTab(n) {
       const userListTab = document.getElementsByClassName("user-list-tab")[0].getElementsByTagName("div");
