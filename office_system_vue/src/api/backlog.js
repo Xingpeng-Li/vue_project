@@ -26,8 +26,9 @@ export function getFinishedBackLogs() {
   })
 }
 
-export function updateBacklog(title,description,endTime) {
+export function updateBacklog(id,title,description,endTime) {
   let formData = new FormData()
+  formData.append("id",id)
   formData.append('title',title)
   formData.append('description',description)
   formData.append('endTime',endTime)

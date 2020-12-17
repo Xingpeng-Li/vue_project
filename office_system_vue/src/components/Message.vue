@@ -123,7 +123,11 @@ export default {
     showType(data) {
       if(data.value==="已处理审批"){
         return data.item.body
-      }else{
+      }
+      else if(data.value==="待办事项过期") {
+        return "待办事项：" + data.item.body + " 已过期"
+      }
+      else{
         return data.value + '提醒'
       }
     },
@@ -139,8 +143,8 @@ export default {
       }else if(value==="待查看审批"){
         return {'show': true, 'type':'查看'}
       }
-      if(value==="已处理审批") {
-        //对于已处理审批而言，用户点开消息则默认其已阅
+      if(value==="已处理审批" || value==="待办事项过期") {
+        //对于已处理审批和待办事项过期而言，用户点开消息则默认其已阅
         if(!row.item.checked) {
           readNotification(row.item.notificationId)
         }

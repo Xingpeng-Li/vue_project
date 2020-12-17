@@ -169,6 +169,7 @@ export default {
       backlog_description: '',
       backlog_endDate: '2020-1-3',
       backlog_endTime: '13:20:00',
+      backlog_id: 0,
       unfinished_list: [
       ],
       finished_list: [
@@ -269,10 +270,11 @@ export default {
       this.backlog_endDate = ""+year+"-"+month+"-"+day
       this.backlog_endTime = ""+hour+":"+minute
       this.$refs['update_backlog'].show()
+      this.backlog_id = unfinished.backlogId
     },
     updateBacklog() {
       let endTime = this.backlog_endDate + " " + this.backlog_endTime
-      updateBacklog(this.backlog_title, this.backlog_description, endTime).then(res => {
+      updateBacklog(this.backlog_id, this.backlog_title, this.backlog_description, endTime).then(res => {
         if(res.data.status === 'success') {
           alert("编辑成功")
           this.getUnfinishedList()
@@ -291,6 +293,7 @@ export default {
       getUncheckedCount().then(res => {
         if(res.data.status === 'success') {
           this_.uncheckedCount = res.data.data.count
+          alert(this_.uncheckedCount)
         }
         else {
           alert("消息获取失败！")

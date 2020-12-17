@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <MyNavBar></MyNavBar>
-    <router-view class="router"/>
+    <MyNavBar ref="navBar"></MyNavBar>
+    <router-view class="router" @get-count="getCount"/>
   </div>
 </template>
 
@@ -11,6 +11,12 @@ export default {
   name: 'App',
   components: {
     MyNavBar
+  },
+  methods: {
+    getCount() {
+      alert("hhh")
+      this.$refs['navBar'].getUncheckedCount()
+    }
   }
 }
 </script>

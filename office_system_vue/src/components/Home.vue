@@ -62,8 +62,6 @@ export default {
       slide: 0,
       sliding: null,
       greeting:"",
-
-
     }
   },
   methods:{
@@ -85,6 +83,27 @@ export default {
   mounted() {
     this.name=this.getcookie("userName");
     this.greeting="尊敬的"+this.name+"，您好！";
+    var userId = this.getcookie("userId");
+    let _this = this
+    //开启连接
+    var url = "ws://localhost:9000/ws/"+userId
+    if(this.socket != null) {
+      this.socket.close()
+      this.socket = null
+    }
+    this.socket = new WebSocket(url)
+    this.socket.onopen = function () {
+      console.log("connected")
+      //上线，接收未阅消息数
+      _this.$emit("get-count")
+    }
+    this.socket.onmessage = function (message) {
+      //收到消息，提醒对方
+      _this.$emit("get-count")
+    }
+    this.socket.onclose = function () {
+      console.log("closed")
+    }
   }
 }
 </script>
