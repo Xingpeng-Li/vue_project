@@ -67,11 +67,11 @@
                   placeholder="请输入验证码"
                   trim
                 ></b-form-input>
-                <b-button variant="primary">发送</b-button>
+                <b-button variant="primary" @click="sendVerificationCode">发送</b-button>
               </b-input-group>
             </div>
           </b-card-body>
-          <b-button variant="primary">登录</b-button>
+          <b-button variant="primary" @click="loginByVerificationCode">登录</b-button>
         </b-tab>
       </b-tabs>
       <router-link to="/register">没有账号？去注册</router-link>
@@ -129,9 +129,10 @@
 </template>
 
 <script>
-import {loginByPassword} from "../api/login";
+import {loginByPassword,login} from "../api/login";
 import {getMyPersonalInfo} from "../api/user";
 import {addCompany, joinCompany as join_company} from "../api/company";
+import {verificationCode} from "../api/register";
 
 export default {
   name: "Login",
@@ -191,6 +192,36 @@ export default {
           alert("成功创建企业");
         }else{
           alert(jsonObj.data.errMsg);
+        }
+      })
+    },
+    sendVerificationCode(){//验证码登录--发送验证码
+      verificationCode(this.phoneNumber,"login").then(res =>  {
+        alert("验证码已发送!")
+      }).catch(err => {
+        alert("发送验证码失败!")
+        console.log(err)
+      })
+    },
+    loginByVerificationCode(){
+      login(this.phoneNumber,this.verificationCode).then(res => {
+        console.log(res.data.status )
+        if(res.data.status === 'success') {
+          getMyPersonalInfo().then(res =>  {
+            let jsonObj = JSON.parse(JSON.stringify(res.data.data));
+            //console.log(jsonObj)
+            //console.log(jsonObj.companyName==="无公司")
+            if(jsonObj.companyName==="无公司"){
+              this.$refs['modal-1'].show()
+            }
+            else{
+              this.$router.push('/home')
+            }
+          })
+        }
+        else {
+          console.log(res.data)
+          alert('登录失败，'+res.data.data.errMsg)
         }
       })
     }
