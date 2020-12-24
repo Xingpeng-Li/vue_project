@@ -13,8 +13,7 @@ export default {
     MyNavBar
   },
   methods: {
-    getCount() {
-      alert("hhh")
+    getCount(){
       this.$refs['navBar'].getUncheckedCount()
     }
   }

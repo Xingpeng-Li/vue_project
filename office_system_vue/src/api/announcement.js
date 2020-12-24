@@ -1,4 +1,3 @@
-
 import request from "../util/request"
 
 export function sendAnnouncement(file,type,title,body) {
